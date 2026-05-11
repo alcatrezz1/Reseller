@@ -17,6 +17,12 @@ function renderCart() {
   badge.textContent = cart.length;
   badge.style.display = cart.length === 0 ? 'none' : 'flex';
 
+  const mbnBadge = document.getElementById('mbnCartBadge');
+  if (mbnBadge) {
+    mbnBadge.textContent = cart.length;
+    mbnBadge.style.display = cart.length === 0 ? 'none' : 'flex';
+  }
+
   if (cart.length === 0) {
     empty.style.display = 'flex';
     footer.style.display = 'none';
@@ -353,7 +359,7 @@ function closeLoginModal() {
 }
 
 document.getElementById('loginBtn').addEventListener('click', () => {
-  if (isAdmin()) { clearAuth(); updateAuthUI(); } else { openLoginModal(); }
+  if (isAdmin()) { clearAuth(); updateAuthUI(); updateMbnAccount(); } else { openLoginModal(); }
 });
 document.getElementById('loginModal').addEventListener('click', e => {
   if (e.target === document.getElementById('loginModal')) closeLoginModal();
@@ -370,6 +376,7 @@ function attemptLogin() {
     setAuth({ role: 'admin' });
     closeLoginModal();
     updateAuthUI();
+    updateMbnAccount();
   } else {
     document.getElementById('loginError').textContent = 'Неверный логин или пароль';
     document.getElementById('loginPassword').value = '';
@@ -776,7 +783,30 @@ if (sliderTrack) {
     .catch(() => { reviews = FALLBACK; initSlider(); });
 })();
 
+// ── Mobile Bottom Nav ──
+const _mbnCart = document.getElementById('mbnCartBtn');
+if (_mbnCart) _mbnCart.addEventListener('click', toggleCart);
+
+const _mbnAccount = document.getElementById('mbnAccountBtn');
+if (_mbnAccount) _mbnAccount.addEventListener('click', () => {
+  if (isAdmin()) { clearAuth(); updateAuthUI(); updateMbnAccount(); } else { openLoginModal(); }
+});
+
+function updateMbnAccount() {
+  const label = document.getElementById('mbnAccountLabel');
+  const btn = document.getElementById('mbnAccountBtn');
+  if (!label || !btn) return;
+  if (isAdmin()) {
+    label.textContent = 'Админ';
+    btn.classList.add('mbn-active');
+  } else {
+    label.textContent = 'Кабинет';
+    btn.classList.remove('mbn-active');
+  }
+}
+
 // ── Init ──
 renderCart();
 updateAuthUI();
+updateMbnAccount();
 loadCustomProducts();
