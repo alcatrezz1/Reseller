@@ -1,5 +1,7 @@
 // ── Cart state ──
-const cart = [];
+const cart = (() => { try { return JSON.parse(localStorage.getItem('rs_cart')) || []; } catch { return []; } })();
+
+function saveCart() { localStorage.setItem('rs_cart', JSON.stringify(cart)); }
 
 function formatPrice(n) {
   return n.toLocaleString('ru-RU') + ' ₽';
@@ -48,12 +50,14 @@ function renderCart() {
 
 function addToCart(name, price) {
   cart.push({ name, price });
+  saveCart();
   renderCart();
   openCart();
 }
 
 function removeFromCart(idx) {
   cart.splice(idx, 1);
+  saveCart();
   renderCart();
 }
 
