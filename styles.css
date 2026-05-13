@@ -2039,3 +2039,57 @@ body.admin-logged .product-admin-delete { display: flex; }
   .cart-btn { display: none !important; }
 }
 .mci-phone:hover { color: var(--accent); }
+
+/* ══════════════════════════════════════════
+   MOBILE: disable backdrop-filter to prevent
+   black-box GPU compositing bug on Android
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Stop blob animation — major GPU drain on mobile */
+  .bg-blob {
+    animation: none;
+    filter: blur(70px);
+    opacity: 0.35;
+  }
+
+  /* Sticky nav elements: backdrop-filter causes black rectangles on Android Chrome */
+  .topbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(8,8,8,0.97);
+  }
+  .header {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(12,12,20,0.97);
+  }
+  .brandnav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(8,8,14,0.97);
+  }
+
+  /* Glass cards and surfaces */
+  .glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(28,28,42,0.88);
+  }
+
+  /* Search bar specifically */
+  .search-bar.glass {
+    background: rgba(40,40,58,0.92);
+  }
+
+  /* Product cards */
+  .product-card.glass {
+    background: rgba(22,22,36,0.90);
+  }
+
+  /* Dropdown (catalog mega-menu on mobile) */
+  .hdr-mega {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(14,14,22,0.99);
+  }
+}
