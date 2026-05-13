@@ -805,6 +805,112 @@ function updateMbnAccount() {
   }
 }
 
+// ── Catalog Mega-menu ──
+(function () {
+  const mega = document.getElementById('hdrMega');
+  const overlay = document.getElementById('hdrMegaOverlay');
+  if (!mega) return;
+
+  document.body.appendChild(mega);
+  if (overlay) document.body.appendChild(overlay);
+
+  const hmmBrands  = document.getElementById('hmmBrands');
+  const hmmModels  = document.getElementById('hmmModels');
+  const hmmBack    = document.getElementById('hmmBack');
+  const hmmClose   = document.getElementById('hmmClose');
+  const hmmTitle   = document.getElementById('hmmTopbarTitle');
+  let hideTimer, isOpen = false;
+
+  const isMob = () => window.innerWidth <= 768;
+
+  function pos() {
+    if (isMob()) return;
+    const wrap = document.getElementById('hdrCatWrap');
+    if (!wrap) return;
+    const r = wrap.getBoundingClientRect();
+    mega.style.top = (r.bottom + 4) + 'px';
+    const mw = mega.offsetWidth || 520;
+    mega.style.left = Math.max(8, Math.min(r.right - mw, window.innerWidth - mw - 8)) + 'px';
+  }
+
+  function openMega() {
+    isOpen = true; clearTimeout(hideTimer);
+    pos();
+    mega.classList.add('is-open');
+    if (overlay && isMob()) { overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+  }
+
+  function closeMega() {
+    isOpen = false;
+    mega.classList.remove('is-open', 'hmm-at-l2');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    mega.querySelectorAll('.hmm-row').forEach(r => r.classList.remove('hmm-active'));
+    mega.querySelectorAll('.hmm-panel').forEach(p => p.classList.remove('is-active'));
+    if (hmmModels) hmmModels.classList.remove('is-visible');
+    if (hmmTitle) hmmTitle.textContent = 'Каталог';
+  }
+
+  function selectBrand(brand, label) {
+    mega.querySelectorAll('.hmm-row').forEach(r => r.classList.remove('hmm-active'));
+    mega.querySelectorAll('.hmm-panel').forEach(p => p.classList.remove('is-active'));
+    const row   = mega.querySelector(`.hmm-row[data-brand="${brand}"]`);
+    const panel = mega.querySelector(`.hmm-panel[data-for="${brand}"]`);
+    if (row)   row.classList.add('hmm-active');
+    if (panel) panel.classList.add('is-active');
+    if (hmmModels) hmmModels.classList.add('is-visible');
+    if (isMob()) {
+      mega.classList.add('hmm-at-l2');
+      if (hmmTitle) hmmTitle.textContent = label;
+    }
+  }
+
+  mega.querySelectorAll('.hmm-row[data-brand]').forEach(btn => {
+    const brand = btn.dataset.brand;
+    const label = btn.querySelector('span.hmm-label')?.textContent?.trim() || brand;
+    btn.addEventListener('mouseenter', () => { if (!isMob()) selectBrand(brand, label); });
+    btn.addEventListener('click',      () => { if (isMob())  selectBrand(brand, label); });
+  });
+
+  if (hmmBack)  hmmBack.addEventListener('click', () => {
+    mega.classList.remove('hmm-at-l2');
+    mega.querySelectorAll('.hmm-row').forEach(r => r.classList.remove('hmm-active'));
+    mega.querySelectorAll('.hmm-panel').forEach(p => p.classList.remove('is-active'));
+    if (hmmModels) hmmModels.classList.remove('is-visible');
+    if (hmmTitle) hmmTitle.textContent = 'Каталог';
+  });
+  if (hmmClose) hmmClose.addEventListener('click', closeMega);
+  if (overlay)  overlay.addEventListener('click',  closeMega);
+
+  // Desktop hover on wrap
+  const wrap = document.getElementById('hdrCatWrap');
+  if (wrap) {
+    wrap.addEventListener('mouseenter', () => { if (!isMob()) { clearTimeout(hideTimer); openMega(); } });
+    wrap.addEventListener('mouseleave', () => { if (!isMob()) hideTimer = setTimeout(() => { if (!mega.matches(':hover')) closeMega(); }, 150); });
+    const catBtn = document.getElementById('hdrCatBtn');
+    if (catBtn) catBtn.addEventListener('click', () => { if (!isMob()) { isOpen ? closeMega() : openMega(); } });
+  }
+  mega.addEventListener('mouseenter', () => { if (!isMob()) clearTimeout(hideTimer); });
+  mega.addEventListener('mouseleave', () => { if (!isMob()) hideTimer = setTimeout(closeMega, 150); });
+
+  // Mobile: bottom nav "Каталог" tap
+  document.querySelectorAll('.mobile-bottomnav a[href="catalog.html"]').forEach(a => {
+    a.addEventListener('click', e => {
+      if (!isMob()) return;
+      e.preventDefault();
+      isOpen ? closeMega() : openMega();
+    });
+  });
+
+  // Close on outside click (desktop)
+  document.addEventListener('click', e => {
+    if (isMob()) return;
+    if (!e.target.closest('#hdrCatWrap') && !e.target.closest('#hdrMega')) closeMega();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen) closeMega(); });
+  window.addEventListener('resize', () => { if (isOpen) pos(); });
+})();
+
 // ── Init ──
 renderCart();
 updateAuthUI();
