@@ -724,9 +724,10 @@ body {
   border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
   box-shadow: 0 4px 20px rgba(0,0,0,0.35);
 }
-.bs-icon svg { width: 26px; height: 26px; }
+.bs-icon svg { width: 26px; height: 26px; flex-shrink: 0; }
 .bs-name { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
 .bs-count { font-size: 13px; color: var(--text-muted); margin-top: 2px; display: block; }
 .products-grid {
