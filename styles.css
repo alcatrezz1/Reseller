@@ -1442,6 +1442,103 @@ body.admin-logged .product-admin-delete { display: flex; }
   white-space: nowrap;
 }
 .header-catalog-btn svg { width: 14px; height: 14px; }
+.hdr-cat-wrap { position: relative; }
+
+/* ── Catalog Mega-menu ── */
+.hdr-mega-overlay {
+  display: none; position: fixed; inset: 0; z-index: 340;
+  background: rgba(0,0,0,0.45);
+}
+.hdr-mega-overlay.active { display: block; }
+
+.hdr-mega {
+  position: fixed; z-index: 350;
+  display: flex;
+  background: rgba(16,16,18,0.97);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.10);
+  opacity: 0; pointer-events: none;
+  transform: translateY(-8px) scale(0.97);
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34,1.4,0.64,1);
+}
+.hdr-mega.is-open { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
+
+.hmm-topbar {
+  display: none; align-items: center; gap: 8px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+.hmm-topbar-title { flex: 1; text-align: center; font-weight: 700; font-size: 15px; }
+.hmm-back, .hmm-close {
+  background: none; border: none; color: var(--accent); font-size: 13px;
+  font-weight: 600; cursor: pointer; padding: 4px 0; display: flex;
+  align-items: center; gap: 3px; font-family: inherit; min-width: 58px;
+}
+.hmm-back svg { width: 18px; height: 18px; }
+.hmm-close { color: var(--text-muted); justify-content: flex-end; }
+.hmm-close svg { width: 20px; height: 20px; }
+
+.hmm-brands {
+  padding: 10px; display: flex; flex-direction: column;
+  gap: 2px; min-width: 210px;
+}
+.hmm-row, .hmm-all-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: var(--radius-sm);
+  text-decoration: none; color: var(--text); font-size: 14px;
+  font-weight: 600; background: none; border: none; cursor: pointer;
+  transition: background 0.15s; width: 100%; text-align: left;
+  font-family: inherit;
+}
+.hmm-row:hover, .hmm-all-row:hover, .hmm-row.hmm-active { background: rgba(255,255,255,0.08); }
+.hmm-icon {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3); font-size: 11px;
+  font-weight: 900; color: white; letter-spacing: -0.3px;
+}
+.hmm-icon svg { width: 17px; height: 17px; }
+.hmm-arrow { margin-left: auto; width: 15px; height: 15px; opacity: 0.35; flex-shrink: 0; transition: opacity 0.15s; }
+.hmm-row.hmm-active .hmm-arrow { opacity: 0.8; }
+.hmm-sep { height: 1px; background: rgba(255,255,255,0.07); margin: 4px 6px; }
+
+.hmm-models {
+  padding: 10px; border-left: 1px solid rgba(255,255,255,0.07);
+  min-width: 300px; display: none;
+}
+.hmm-models.is-visible { display: block; }
+.hmm-panel { display: none; }
+.hmm-panel.is-active { display: block; }
+
+@media (max-width: 768px) {
+  .hdr-mega {
+    position: fixed; left: 0 !important; right: 0; top: auto !important;
+    bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+    width: 100% !important; min-width: unset;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    flex-direction: column;
+    opacity: 1; transform: translateY(calc(100% + 10px));
+    transition: transform 0.35s cubic-bezier(0.25,1,0.5,1);
+    max-height: 75vh; overflow: hidden;
+  }
+  .hdr-mega.is-open { transform: translateY(0); }
+  .hmm-topbar { display: flex; }
+  .hmm-brands { min-width: unset; width: 100%; overflow-y: auto; }
+  .hmm-models {
+    display: block; border-left: none; border-top: 1px solid rgba(255,255,255,0.07);
+    min-width: unset; padding: 10px 14px; overflow-y: auto;
+  }
+  .hdr-mega:not(.hmm-at-l2) .hmm-models { display: none; }
+  .hdr-mega.hmm-at-l2 .hmm-brands { display: none; }
+  .hdr-mega.hmm-at-l2 .hmm-models { display: block; }
+  .hmm-row, .hmm-all-row { padding: 11px 12px; font-size: 15px; }
+  .hmm-icon { width: 38px; height: 38px; border-radius: 10px; font-size: 12px; }
+  .hmm-icon svg { width: 20px; height: 20px; }
+}
 
 /* ═════════════════════════════════════════
    SCROLL REVEAL
