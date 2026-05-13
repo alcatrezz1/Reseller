@@ -911,6 +911,40 @@ function updateMbnAccount() {
   window.addEventListener('resize', () => { if (isOpen) pos(); });
 })();
 
+// ── Call Modal ──
+(function () {
+  const modal  = document.getElementById('callModal');
+  const form   = document.getElementById('callForm');
+  const success = document.getElementById('callSuccess');
+  const errEl  = document.getElementById('callModalError');
+  if (!modal) return;
+
+  function openCall() {
+    form.style.display = '';
+    success.style.display = 'none';
+    if (errEl) errEl.textContent = '';
+    document.getElementById('callName').value = '';
+    document.getElementById('callPhone').value = '';
+    modal.classList.add('active');
+  }
+  function closeCall() { modal.classList.remove('active'); }
+
+  document.getElementById('callBtn')?.addEventListener('click', openCall);
+  document.getElementById('callModalClose').addEventListener('click', closeCall);
+  modal.addEventListener('click', e => { if (e.target === modal) closeCall(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCall(); });
+
+  document.getElementById('callModalSubmit').addEventListener('click', () => {
+    const name  = document.getElementById('callName').value.trim();
+    const phone = document.getElementById('callPhone').value.trim();
+    if (!name)  { errEl.textContent = 'Введите ваше имя'; return; }
+    if (!phone) { errEl.textContent = 'Введите номер телефона'; return; }
+    form.style.display = 'none';
+    success.style.display = 'block';
+    setTimeout(closeCall, 3000);
+  });
+})();
+
 // ── Init ──
 renderCart();
 updateAuthUI();

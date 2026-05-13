@@ -66,6 +66,10 @@
       </div>
 
       <div class="header-actions">
+        <button class="btn-ghost call-btn" id="callBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          Заказать звонок
+        </button>
         <a href="about.html" class="btn-ghost header-about-btn">О нас</a>
         <a href="catalog.html" class="btn-primary header-catalog-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -488,6 +492,36 @@
       </div>
       <div class="login-error" id="loginError"></div>
       <button class="btn-primary" id="loginSubmit" style="width:100%;justify-content:center;">Войти</button>
+    </div>
+  </div>
+
+  <!-- ══ CALL MODAL ══ -->
+  <div class="modal-overlay" id="callModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Заказать звонок</h3>
+        <button class="modal-close-btn" id="callModalClose">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="callForm">
+        <p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.55;">Оставьте заявку — мы перезвоним вам в ближайшее время</p>
+        <div class="form-group">
+          <label>Ваше имя</label>
+          <input type="text" id="callName" placeholder="Введите ваше имя" autocomplete="name"/>
+        </div>
+        <div class="form-group">
+          <label>Телефон</label>
+          <input type="tel" id="callPhone" placeholder="+7 (___) ___-__-__" autocomplete="tel"/>
+        </div>
+        <div class="call-modal-error" id="callModalError"></div>
+        <button class="btn-primary" id="callModalSubmit" style="width:100%;justify-content:center;">Отправить заявку</button>
+      </div>
+      <div class="call-success" id="callSuccess" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="52" height="52"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <p style="font-size:17px;font-weight:700;margin-top:14px;">Заявка принята!</p>
+        <p style="font-size:14px;color:var(--text-muted);margin-top:6px;line-height:1.5;">Мы перезвоним вам<br>в ближайшее время</p>
+      </div>
     </div>
   </div>
 
