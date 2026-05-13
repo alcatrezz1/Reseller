@@ -1504,6 +1504,7 @@ body.admin-logged .product-admin-delete { display: flex; }
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 3px 8px rgba(0,0,0,0.3); font-size: 11px;
   font-weight: 900; color: white; letter-spacing: -0.3px;
+  overflow: hidden;
 }
 .hmm-icon svg { width: 17px; height: 17px; }
 .hmm-arrow { margin-left: auto; width: 15px; height: 15px; opacity: 0.35; flex-shrink: 0; transition: opacity 0.15s; }
