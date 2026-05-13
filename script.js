@@ -271,63 +271,43 @@ if (brandnav) {
 
 // ── Brand filter ──
 function filterBrand(brand) {
-  if (!document.getElementById('productsGrid')) {
-    window.location.href = 'catalog.html';
+  const section = document.getElementById('brand-' + brand);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.brand-link').forEach(l =>
+      l.classList.toggle('brand-active', l.dataset.brand === brand));
     return;
   }
-  const cards = document.querySelectorAll('#productsGrid .product-card');
-  let visible = 0;
-  cards.forEach(card => {
-    const show = card.dataset.brand === brand;
-    card.style.display = show ? '' : 'none';
-    if (show) visible++;
-  });
-  const emptyEl = document.getElementById('catalogEmpty');
-  if (emptyEl) emptyEl.style.display = visible === 0 ? 'block' : 'none';
-  document.querySelectorAll('.brand-link').forEach(link => {
-    link.classList.toggle('brand-active', link.dataset.brand === brand);
-  });
-  const catalogEl = document.getElementById('catalog');
-  if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth' });
+  window.location.href = 'catalog.html#brand-' + brand;
 }
 
 function filterSeries(series) {
-  if (!document.getElementById('productsGrid')) {
-    window.location.href = 'catalog.html?series=' + series;
+  const card = document.querySelector('[data-series="' + series + '"]');
+  if (card) {
+    const section = card.closest('.brand-section') || document.getElementById('catalog');
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
-  const cards = document.querySelectorAll('#productsGrid .product-card');
-  let visible = 0;
-  cards.forEach(card => {
-    const show = card.dataset.series === series;
-    card.style.display = show ? '' : 'none';
-    if (show) visible++;
-  });
-  const emptyEl = document.getElementById('catalogEmpty');
-  if (emptyEl) emptyEl.style.display = visible === 0 ? 'block' : 'none';
-  const catalogEl = document.getElementById('catalog');
-  if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth' });
+  window.location.href = 'catalog.html?series=' + series;
 }
 
 function showAllBrands() {
-  if (!document.getElementById('productsGrid')) return;
-  document.querySelectorAll('#productsGrid .product-card').forEach(card => {
-    card.style.display = '';
-  });
-  const emptyEl = document.getElementById('catalogEmpty');
-  if (emptyEl) emptyEl.style.display = 'none';
-  document.querySelectorAll('.brand-link').forEach(link => link.classList.remove('brand-active'));
   const catalogEl = document.getElementById('catalog');
   if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('.brand-link').forEach(l => l.classList.remove('brand-active'));
 }
 
-// ── Apply ?series= or ?brand= URL param on catalog page load ──
+// ── Apply ?series= or ?brand= URL param, or #brand-X hash on catalog load ──
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const series = params.get('series');
-  const brand = params.get('brand');
+  const brand  = params.get('brand');
   if (series) filterSeries(series);
   else if (brand) filterBrand(brand);
+  else if (window.location.hash && window.location.hash.startsWith('#brand-')) {
+    const section = document.querySelector(window.location.hash);
+    if (section) setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
 });
 
 // ── Auth ──
@@ -550,8 +530,13 @@ function deleteCustomProduct(id) {
 }
 
 function loadCustomProducts() {
-  if (!document.getElementById('productsGrid')) return;
-  getCustomProducts().forEach(renderCustomProduct);
+  const grid = document.getElementById('productsGrid');
+  if (!grid) return;
+  const products = getCustomProducts();
+  if (!products.length) return;
+  const adminSection = document.getElementById('admin-brand-section');
+  if (adminSection) adminSection.style.display = '';
+  products.forEach(renderCustomProduct);
 }
 
 // ── Banner Slider ──

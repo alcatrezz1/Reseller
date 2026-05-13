@@ -274,11 +274,19 @@
   </section>
 
   <!-- ══ CATALOG ══ -->
-  <section class="catalog" id="catalog">
+  <div class="catalog" id="catalog">
     <div class="container">
-      <div class="products-grid" id="productsGrid">
 
-        <!-- iPhone 17 -->
+    <!-- ══ APPLE ══ -->
+    <section class="brand-section" id="brand-apple">
+      <div class="brand-section-header">
+        <span class="bs-icon" style="background:linear-gradient(135deg,#007AFF,#5AC8FA)"><svg viewBox="0 0 24 24" fill="white"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.56-1.701"/></svg></span>
+        <div class="bs-info">
+          <h2 class="bs-name">Apple</h2>
+          <span class="bs-count">3 товара</span>
+        </div>
+      </div>
+      <div class="products-grid">
         <div class="product-card glass reveal" data-brand="apple" data-series="iphone">
           <div class="product-badge badge-new">Новинка</div>
           <div class="product-visual apple-visual">
@@ -303,8 +311,6 @@
             </div>
           </div>
         </div>
-
-        <!-- iPhone 17 Pro -->
         <div class="product-card glass reveal featured-card" data-brand="apple" data-series="iphone">
           <div class="product-badge badge-pro">Pro</div>
           <div class="product-visual apple-visual pro-vis">
@@ -329,8 +335,41 @@
             </div>
           </div>
         </div>
-
-        <!-- Samsung S25 -->
+        <div class="product-card glass reveal" data-brand="apple" data-series="macbook">
+          <div class="product-badge badge-year">M4</div>
+          <div class="product-visual">
+            <div class="pv-icon" style="background:linear-gradient(135deg,#636366,#8E8E93);width:130px;height:90px;border-radius:12px;">
+              <svg viewBox="0 0 24 24" fill="white" width="48" height="48"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4" stroke="white" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Apple</div>
+            <h3 class="product-name">MacBook Air M4</h3>
+            <p class="product-specs">Apple M4 · 13" Retina · 16 ГБ · 256 ГБ SSD</p>
+            <div class="product-colors">
+              <span class="cdot" style="background:#E8E8F0" title="Silver" data-active="true"></span>
+              <span class="cdot" style="background:#8C7B6B" title="Starlight"></span>
+              <span class="cdot" style="background:#1C1C1E" title="Midnight"></span>
+              <span class="cdot" style="background:#4A7090" title="Sky Blue"></span>
+            </div>
+            <div class="product-bottom">
+              <div class="product-price">119 990 <span>₽</span></div>
+              <button class="buy-btn" onclick="addToCart('MacBook Air M4', 119990)">В корзину</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ══ SAMSUNG ══ -->
+    <section class="brand-section" id="brand-samsung">
+      <div class="brand-section-header">
+        <span class="bs-icon" style="background:linear-gradient(135deg,#1428A0,#4F6BED)"><svg viewBox="0 0 24 24" fill="white"><rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="18" r="1.2"/></svg></span>
+        <div class="bs-info">
+          <h2 class="bs-name">Samsung</h2>
+          <span class="bs-count">3 товара</span>
+        </div>
+      </div>
+      <div class="products-grid">
         <div class="product-card glass reveal" data-brand="samsung" data-series="galaxy-s">
           <div class="product-badge badge-year">2025</div>
           <div class="product-visual samsung-visual">
@@ -355,8 +394,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Samsung S25 Ultra -->
         <div class="product-card glass reveal" data-brand="samsung" data-series="galaxy-s">
           <div class="product-badge badge-ultra">Ultra</div>
           <div class="product-visual samsung-visual ultra-vis">
@@ -381,34 +418,6 @@
             </div>
           </div>
         </div>
-
-
-        <!-- MacBook Air M4 -->
-        <div class="product-card glass reveal" data-brand="apple" data-series="macbook">
-          <div class="product-badge badge-year">M4</div>
-          <div class="product-visual">
-            <div class="pv-icon" style="background:linear-gradient(135deg,#636366,#8E8E93);width:130px;height:90px;border-radius:12px;">
-              <svg viewBox="0 0 24 24" fill="white" width="48" height="48"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4" stroke="white" stroke-width="1.5" fill="none"/></svg>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-brand">Apple</div>
-            <h3 class="product-name">MacBook Air M4</h3>
-            <p class="product-specs">Apple M4 · 13" Retina · 16 ГБ · 256 ГБ SSD</p>
-            <div class="product-colors">
-              <span class="cdot" style="background:#E8E8F0" title="Silver" data-active="true"></span>
-              <span class="cdot" style="background:#8C7B6B" title="Starlight"></span>
-              <span class="cdot" style="background:#1C1C1E" title="Midnight"></span>
-              <span class="cdot" style="background:#4A7090" title="Sky Blue"></span>
-            </div>
-            <div class="product-bottom">
-              <div class="product-price">119 990 <span>₽</span></div>
-              <button class="buy-btn" onclick="addToCart('MacBook Air M4', 119990)">В корзину</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Samsung Galaxy Tab S10+ -->
         <div class="product-card glass reveal" data-brand="samsung" data-series="galaxy-tab">
           <div class="product-badge badge-year">2025</div>
           <div class="product-visual">
@@ -430,8 +439,18 @@
             </div>
           </div>
         </div>
-
-        <!-- Dyson V15 Detect Absolute -->
+      </div>
+    </section>
+    <!-- ══ DYSON ══ -->
+    <section class="brand-section" id="brand-dyson">
+      <div class="brand-section-header">
+        <span class="bs-icon" style="background:linear-gradient(135deg,#C5A96D,#A08040)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg></span>
+        <div class="bs-info">
+          <h2 class="bs-name">Dyson</h2>
+          <span class="bs-count">2 товара</span>
+        </div>
+      </div>
+      <div class="products-grid">
         <div class="product-card glass reveal" data-brand="dyson" data-series="dyson-vacuum">
           <div class="product-badge badge-new">Новинка</div>
           <div class="product-visual">
@@ -449,8 +468,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Dyson Supersonic HD15 -->
         <div class="product-card glass reveal" data-brand="dyson" data-series="dyson-hair">
           <div class="product-badge badge-pro">Хит</div>
           <div class="product-visual">
@@ -468,8 +485,18 @@
             </div>
           </div>
         </div>
-
-        <!-- PlayStation 5 -->
+      </div>
+    </section>
+    <!-- ══ PLAYSTATION ══ -->
+    <section class="brand-section" id="brand-playstation">
+      <div class="brand-section-header">
+        <span class="bs-icon" style="background:linear-gradient(135deg,#003087,#4F6BED)"><svg viewBox="0 0 100 100" fill="white"><circle cx="50" cy="50" r="44" fill="none" stroke="white" stroke-width="6"/><text x="50" y="63" font-family="Inter,sans-serif" font-size="30" font-weight="900" text-anchor="middle">PS</text></svg></span>
+        <div class="bs-info">
+          <h2 class="bs-name">PlayStation</h2>
+          <span class="bs-count">2 товара</span>
+        </div>
+      </div>
+      <div class="products-grid">
         <div class="product-card glass reveal" data-brand="playstation" data-series="playstation-5">
           <div class="product-badge badge-ultra">Хит</div>
           <div class="product-visual">
@@ -487,8 +514,6 @@
             </div>
           </div>
         </div>
-
-        <!-- DualSense Edge -->
         <div class="product-card glass reveal" data-brand="playstation" data-series="ps-controller">
           <div class="product-badge badge-pro">Pro</div>
           <div class="product-visual">
@@ -506,8 +531,18 @@
             </div>
           </div>
         </div>
-
-        <!-- Honor Magic7 Pro -->
+      </div>
+    </section>
+    <!-- ══ HONOR ══ -->
+    <section class="brand-section" id="brand-honor">
+      <div class="brand-section-header">
+        <span class="bs-icon" style="background:linear-gradient(135deg,#CF0000,#FF4040)"><svg viewBox="0 0 24 24" fill="white"><rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="18" r="1.2"/></svg></span>
+        <div class="bs-info">
+          <h2 class="bs-name">Honor</h2>
+          <span class="bs-count">1 товар</span>
+        </div>
+      </div>
+      <div class="products-grid">
         <div class="product-card glass reveal" data-brand="honor" data-series="honor-phone">
           <div class="product-badge badge-new">Новинка</div>
           <div class="product-visual">
@@ -530,8 +565,18 @@
             </div>
           </div>
         </div>
-
-        <!-- Xiaomi 15 Ultra -->
+      </div>
+    </section>
+    <!-- ══ XIAOMI ══ -->
+    <section class="brand-section" id="brand-xiaomi">
+      <div class="brand-section-header">
+        <span class="bs-icon" style="background:linear-gradient(135deg,#FF6900,#FFAA00)"><svg viewBox="0 0 24 24" fill="white"><rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="18" r="1.2"/></svg></span>
+        <div class="bs-info">
+          <h2 class="bs-name">Xiaomi</h2>
+          <span class="bs-count">2 товара</span>
+        </div>
+      </div>
+      <div class="products-grid">
         <div class="product-card glass reveal" data-brand="xiaomi" data-series="xiaomi-phone">
           <div class="product-badge badge-ultra">Ultra</div>
           <div class="product-visual">
@@ -554,8 +599,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Redmi Note 14 Pro -->
         <div class="product-card glass reveal" data-brand="xiaomi" data-series="redmi-phone">
           <div class="product-badge badge-new">Хит</div>
           <div class="product-visual">
@@ -579,8 +622,18 @@
             </div>
           </div>
         </div>
-
-        <!-- OnePlus 13 -->
+      </div>
+    </section>
+    <!-- ══ ONEPLUS ══ -->
+    <section class="brand-section" id="brand-oneplus">
+      <div class="brand-section-header">
+        <span class="bs-icon" style="background:linear-gradient(135deg,#F5010C,#FF6060)"><svg viewBox="0 0 24 24" fill="white"><path d="M0 3.74V24h20.26V12.428h-2.256v9.317H2.254V5.995h9.318V3.742zM18.004 0v3.74h-3.758v2.256h3.758v3.758h2.255V5.996H24V3.74h-3.758V0zm-6.45 18.756V8.862H9.562c0 .682-.228 1.189-.577 1.504-.367.297-.91.437-1.556.437h-.245v1.625h2.133v6.31h2.237z"/></svg></span>
+        <div class="bs-info">
+          <h2 class="bs-name">OnePlus</h2>
+          <span class="bs-count">1 товар</span>
+        </div>
+      </div>
+      <div class="products-grid">
         <div class="product-card glass reveal" data-brand="oneplus" data-series="oneplus-flagship">
           <div class="product-badge badge-new">Новинка</div>
           <div class="product-visual">
@@ -603,8 +656,18 @@
             </div>
           </div>
         </div>
-
-        <!-- Google Pixel 9 Pro -->
+      </div>
+    </section>
+    <!-- ══ GOOGLE ══ -->
+    <section class="brand-section" id="brand-google">
+      <div class="brand-section-header">
+        <span class="bs-icon" style="background:#fff"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg></span>
+        <div class="bs-info">
+          <h2 class="bs-name">Google</h2>
+          <span class="bs-count">2 товара</span>
+        </div>
+      </div>
+      <div class="products-grid">
         <div class="product-card glass reveal featured-card" data-brand="google" data-series="pixel-9-pro">
           <div class="product-badge badge-pro">Pro</div>
           <div class="product-visual">
@@ -629,8 +692,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Google Pixel 9 -->
         <div class="product-card glass reveal" data-brand="google" data-series="pixel-9">
           <div class="product-badge badge-new">Новинка</div>
           <div class="product-visual">
@@ -654,14 +715,21 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-      </div>
-      <div id="catalogEmpty" style="display:none; text-align:center; padding:60px 0; color:var(--text-muted); font-size:16px;">
-        Товаров этого бренда пока нет в наличии.<br>
-        <button onclick="showAllBrands()" style="margin-top:16px;padding:10px 24px;border:none;border-radius:12px;background:var(--accent);color:#fff;font-size:15px;cursor:pointer;">Показать все товары</button>
-      </div>
+      <!-- Admin-added products (shown when admin adds via panel) -->
+      <section class="brand-section" id="admin-brand-section" style="display:none">
+        <div class="brand-section-header">
+          <div class="bs-info">
+            <h2 class="bs-name">Добавленные товары</h2>
+          </div>
+        </div>
+        <div class="products-grid" id="productsGrid"></div>
+      </section>
+
     </div>
-  </section>
+  </div>
 
   <!-- ══ FEATURES STRIP ══ -->
   <section class="features-strip">
