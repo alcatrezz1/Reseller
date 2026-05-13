@@ -2045,14 +2045,13 @@ body.admin-logged .product-admin-delete { display: flex; }
    black-box GPU compositing bug on Android
 ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
-  /* Stop blob animation — major GPU drain on mobile */
+  /* Blobs: keep animation (transform is GPU-safe), just reduce blur slightly */
   .bg-blob {
-    animation: none;
-    filter: blur(70px);
-    opacity: 0.35;
+    filter: blur(90px);
+    opacity: 0.5;
   }
 
-  /* Sticky nav elements: backdrop-filter causes black rectangles on Android Chrome */
+  /* Sticky/fixed nav — backdrop-filter on these causes black rect artifacts on Android */
   .topbar {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -2069,21 +2068,31 @@ body.admin-logged .product-admin-delete { display: flex; }
     background: rgba(8,8,14,0.97);
   }
 
+  /* Search bar has its own backdrop-filter separate from .glass */
+  .search-bar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(38,38,56,0.92);
+    border-color: rgba(255,255,255,0.14);
+  }
+
+  /* Mobile bottom nav */
+  .mobile-bottomnav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(10,10,14,0.99);
+  }
+
   /* Glass cards and surfaces */
   .glass {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: rgba(28,28,42,0.88);
-  }
-
-  /* Search bar specifically */
-  .search-bar.glass {
-    background: rgba(40,40,58,0.92);
+    background: rgba(26,26,40,0.90);
   }
 
   /* Product cards */
   .product-card.glass {
-    background: rgba(22,22,36,0.90);
+    background: rgba(20,20,34,0.92);
   }
 
   /* Dropdown (catalog mega-menu on mobile) */
