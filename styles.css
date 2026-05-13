@@ -294,6 +294,10 @@ body {
   transition: color 0.2s;
   white-space: nowrap;
   position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 .brand-link::after {
   content: '';
