@@ -794,6 +794,19 @@ body {
   z-index: 5;
 }
 .pv-wall { position: absolute; inset: 0; }
+.pv-icon {
+  width: 84px;
+  height: 84px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  transition: transform 0.4s ease;
+}
+.pv-icon svg { width: 44px; height: 44px; }
+.product-card:hover .pv-icon { transform: scale(1.05) translateY(-5px); }
+
 
 /* Product info */
 .product-info {

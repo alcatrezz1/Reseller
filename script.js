@@ -105,8 +105,20 @@ const searchDropdown = document.getElementById('searchDropdown');
 const catalog = [
   { name: 'iPhone 17', brand: 'Apple', specs: 'A19 · 6.1" Super Retina · 48 Мп', color1: '#007AFF', color2: '#5AC8FA', price: 100000 },
   { name: 'iPhone 17 Pro', brand: 'Apple', specs: 'A19 Pro · 6.3" ProMotion · Titanium', color1: '#5856D6', color2: '#AF52DE', price: 100000 },
+  { name: 'MacBook Air M4', brand: 'Apple', specs: 'Apple M4 · 13" Retina · 16 ГБ · 256 ГБ SSD', color1: '#636366', color2: '#8E8E93', price: 119990 },
   { name: 'Samsung Galaxy S25', brand: 'Samsung', specs: 'Snapdragon 8 Elite · 6.2" AMOLED · 50 Мп', color1: '#1428A0', color2: '#4F6BED', price: 100000 },
   { name: 'Samsung Galaxy S25 Ultra', brand: 'Samsung', specs: 'Snapdragon 8 Elite · 6.9" LTPO · 200 Мп · S Pen', color1: '#E63946', color2: '#FF6B6B', price: 100000 },
+  { name: 'Samsung Galaxy Tab S10+', brand: 'Samsung', specs: 'Snapdragon 8 Gen 3 · 12.4" AMOLED · 256 ГБ', color1: '#7209B7', color2: '#B5179E', price: 84990 },
+  { name: 'Dyson V15 Detect Absolute', brand: 'Dyson', specs: 'Лазерное обнаружение · HEPA · 60 мин', color1: '#C5A96D', color2: '#A08040', price: 67990 },
+  { name: 'Dyson Supersonic HD15', brand: 'Dyson', specs: '1600 Вт · IQ Sensor · 3 насадки', color1: '#B8945A', color2: '#8B6914', price: 54990 },
+  { name: 'PlayStation 5', brand: 'PlayStation', specs: 'AMD Zen 2 · 4K 120fps · SSD 825 ГБ', color1: '#003087', color2: '#4F6BED', price: 59990 },
+  { name: 'DualSense Edge', brand: 'PlayStation', specs: 'Сменные стики · Профили · Адаптивные триггеры', color1: '#1428A0', color2: '#4F6BED', price: 14990 },
+  { name: 'Honor Magic7 Pro', brand: 'Honor', specs: 'Kirin 9020 · 6.8" LTPO OLED · 50 Мп', color1: '#CF0000', color2: '#FF4040', price: 84990 },
+  { name: 'Xiaomi 15 Ultra', brand: 'Xiaomi', specs: 'Snapdragon 8 Elite · 6.73" AMOLED · 200 Мп Leica', color1: '#FF6900', color2: '#FFAA00', price: 109990 },
+  { name: 'Redmi Note 14 Pro', brand: 'Xiaomi', specs: 'Dimensity 7300 Ultra · 6.67" AMOLED · 200 Мп', color1: '#FF6900', color2: '#FFAA00', price: 34990 },
+  { name: 'OnePlus 13', brand: 'OnePlus', specs: 'Snapdragon 8 Elite · 6.82" LTPO · 50 Мп Hasselblad', color1: '#F5010C', color2: '#FF6060', price: 79990 },
+  { name: 'Google Pixel 9 Pro', brand: 'Google', specs: 'Google Tensor G4 · 6.3" OLED · 50 Мп · Gemini AI', color1: '#4285F4', color2: '#34A853', price: 94990 },
+  { name: 'Google Pixel 9', brand: 'Google', specs: 'Google Tensor G4 · 6.3" OLED · 50 Мп · Android 15', color1: '#4285F4', color2: '#34A853', price: 74990 },
 ];
 
 searchInput.addEventListener('input', () => {
