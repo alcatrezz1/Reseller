@@ -303,98 +303,100 @@
   <!-- ══ RECOMMENDED ══ -->
   <section class="home-catalog-section" id="recommended">
     <div class="container">
-      <h2 class="section-title reveal">Рекомендуемое</h2>
-      <p class="section-sub reveal" style="margin-bottom:32px;">Лучшие предложения для вас</p>
-      <div class="products-grid">
+      <div class="rec-carousel-wrap reveal">
+        <div class="rec-carousel" id="recCarousel">
 
-        <!-- iPhone 17 Pro -->
-        <div class="product-card glass reveal featured-card" data-brand="apple">
-          <div class="product-badge badge-pro">Pro</div>
-          <div class="product-visual apple-visual pro-vis">
-            <div class="pv-frame pro-frame">
-              <div class="pv-notch-pill"></div>
-              <div class="pv-wall" style="background:linear-gradient(145deg,#0d0d0d,#1a0a2e,#2d1b69)"></div>
+          <!-- iPhone 17 Pro -->
+          <div class="rec-card glass" onclick="location.href='catalog.html#brand-apple'">
+            <div class="rec-visual apple-visual pro-vis">
+              <div class="pv-frame pro-frame" style="width:73px;height:133px;border-radius:17px;">
+                <div class="pv-notch-pill" style="width:30px;height:8px;top:7px;"></div>
+                <div class="pv-wall" style="background:linear-gradient(145deg,#0d0d0d,#1a0a2e,#2d1b69)"></div>
+              </div>
+            </div>
+            <div class="rec-info">
+              <div class="rec-name">iPhone 17 Pro</div>
+              <div class="rec-price">100 000 <span>₽</span></div>
             </div>
           </div>
-          <div class="product-info">
-            <div class="product-brand">Apple</div>
-            <h3 class="product-name">iPhone 17 Pro</h3>
-            <p class="product-specs">A19 Pro · 6.3" ProMotion · Titanium</p>
-            <div class="product-colors">
-              <span class="cdot" style="background:#8C7B6B" title="Desert" data-active="true"></span>
-              <span class="cdot" style="background:#1C1C1E" title="Black"></span>
-              <span class="cdot" style="background:#F5F5F0" title="White"></span>
+
+          <!-- Dyson Supersonic HD15 -->
+          <div class="rec-card glass" onclick="location.href='catalog.html#brand-dyson'">
+            <div class="rec-visual">
+              <div class="pv-icon" style="background:linear-gradient(135deg,#B8945A,#8B6914);width:56px;height:56px;border-radius:15px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" width="28" height="28"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg>
+              </div>
             </div>
-            <div class="product-bottom">
-              <div class="product-price">100 000 <span>₽</span></div>
-              <button class="buy-btn" onclick="addToCart('iPhone 17 Pro', 100000)">В корзину</button>
+            <div class="rec-info">
+              <div class="rec-name">Supersonic HD15</div>
+              <div class="rec-price">54 990 <span>₽</span></div>
             </div>
           </div>
+
+          <!-- PlayStation 5 -->
+          <div class="rec-card glass" onclick="location.href='catalog.html#brand-playstation'">
+            <div class="rec-visual">
+              <div class="pv-icon" style="background:linear-gradient(135deg,#003087,#4F6BED);width:56px;height:56px;border-radius:15px;">
+                <svg viewBox="0 0 100 100" fill="white" width="32" height="32"><circle cx="50" cy="50" r="44" fill="none" stroke="white" stroke-width="6"/><text x="50" y="63" font-family="Inter,sans-serif" font-size="30" font-weight="900" text-anchor="middle">PS</text></svg>
+              </div>
+            </div>
+            <div class="rec-info">
+              <div class="rec-name">PlayStation 5</div>
+              <div class="rec-price">59 990 <span>₽</span></div>
+            </div>
+          </div>
+
+          <!-- Google Pixel 9 Pro -->
+          <div class="rec-card glass" onclick="location.href='catalog.html#brand-google'">
+            <div class="rec-visual">
+              <div class="pv-frame" style="width:71px;height:130px;border-radius:12px;border-color:rgba(66,133,244,0.3);">
+                <div class="pv-punch-hole" style="width:7px;height:7px;top:8px;"></div>
+                <div class="pv-wall" style="background:linear-gradient(145deg,#0a0f1a,#0f1a2e,#0d1520)"></div>
+              </div>
+            </div>
+            <div class="rec-info">
+              <div class="rec-name">Pixel 9 Pro</div>
+              <div class="rec-price">94 990 <span>₽</span></div>
+            </div>
+          </div>
+
+          <!-- Samsung Galaxy S25 Ultra -->
+          <div class="rec-card glass" onclick="location.href='catalog.html#brand-samsung'">
+            <div class="rec-visual samsung-visual">
+              <div class="pv-frame" style="width:71px;height:133px;border-radius:14px;border-color:rgba(20,40,160,0.3);">
+                <div class="pv-punch-hole" style="width:7px;height:7px;top:8px;"></div>
+                <div class="pv-wall" style="background:linear-gradient(145deg,#0d0d0d,#1a0808,#2d0a0a)"></div>
+              </div>
+            </div>
+            <div class="rec-info">
+              <div class="rec-name">Galaxy S25 Ultra</div>
+              <div class="rec-price">129 990 <span>₽</span></div>
+            </div>
+          </div>
+
+          <!-- Xiaomi 15 Ultra -->
+          <div class="rec-card glass" onclick="location.href='catalog.html#brand-xiaomi'">
+            <div class="rec-visual">
+              <div class="pv-frame" style="width:71px;height:133px;border-radius:14px;border-color:rgba(255,105,0,0.3);">
+                <div class="pv-punch-hole" style="width:7px;height:7px;top:8px;"></div>
+                <div class="pv-wall" style="background:linear-gradient(145deg,#1a0a00,#2d1500,#1a0d00)"></div>
+              </div>
+            </div>
+            <div class="rec-info">
+              <div class="rec-name">Xiaomi 15 Ultra</div>
+              <div class="rec-price">109 990 <span>₽</span></div>
+            </div>
+          </div>
+
         </div>
-
-        <!-- Dyson Supersonic HD15 -->
-        <div class="product-card glass reveal" data-brand="dyson">
-          <div class="product-badge badge-pro">Хит</div>
-          <div class="product-visual">
-            <div class="pv-icon" style="background:linear-gradient(135deg,#B8945A,#8B6914);">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-brand">Dyson</div>
-            <h3 class="product-name">Supersonic HD15</h3>
-            <p class="product-specs">1600 Вт · IQ Sensor · 3 насадки · Защита от жара</p>
-            <div class="product-bottom">
-              <div class="product-price">54 990 <span>₽</span></div>
-              <button class="buy-btn" onclick="addToCart('Dyson Supersonic HD15', 54990)">В корзину</button>
-            </div>
-          </div>
+        <div class="rec-nav">
+          <button class="rec-nav-btn" onclick="recScroll(-1)" aria-label="Назад">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="rec-nav-btn" onclick="recScroll(1)" aria-label="Вперёд">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
-
-        <!-- PlayStation 5 -->
-        <div class="product-card glass reveal" data-brand="playstation">
-          <div class="product-badge badge-ultra">Хит</div>
-          <div class="product-visual">
-            <div class="pv-icon" style="background:linear-gradient(135deg,#003087,#4F6BED);">
-              <svg viewBox="0 0 100 100" fill="white" width="52" height="52"><circle cx="50" cy="50" r="44" fill="none" stroke="white" stroke-width="6"/><text x="50" y="63" font-family="Inter,sans-serif" font-size="30" font-weight="900" text-anchor="middle">PS</text></svg>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-brand">PlayStation</div>
-            <h3 class="product-name">PlayStation 5</h3>
-            <p class="product-specs">AMD Zen 2 · 4K 120fps · SSD 825 ГБ · DualSense</p>
-            <div class="product-bottom">
-              <div class="product-price">59 990 <span>₽</span></div>
-              <button class="buy-btn" onclick="addToCart('PlayStation 5', 59990)">В корзину</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Google Pixel 9 Pro -->
-        <div class="product-card glass reveal featured-card" data-brand="google">
-          <div class="product-badge badge-pro">Pro</div>
-          <div class="product-visual">
-            <div class="pv-frame" style="width:106px;height:196px;border-radius:18px;border-color:rgba(66,133,244,0.3);">
-              <div class="pv-punch-hole"></div>
-              <div class="pv-wall" style="background:linear-gradient(145deg,#0a0f1a,#0f1a2e,#0d1520)"></div>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-brand">Google</div>
-            <h3 class="product-name">Pixel 9 Pro</h3>
-            <p class="product-specs">Google Tensor G4 · 6.3" OLED · 50 Мп · Gemini AI</p>
-            <div class="product-colors">
-              <span class="cdot" style="background:#C8A882" title="Hazel" data-active="true"></span>
-              <span class="cdot" style="background:#1C1C1E" title="Obsidian"></span>
-              <span class="cdot" style="background:#F5E8E0" title="Porcelain"></span>
-            </div>
-            <div class="product-bottom">
-              <div class="product-price">94 990 <span>₽</span></div>
-              <button class="buy-btn" onclick="addToCart('Google Pixel 9 Pro', 94990)">В корзину</button>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
