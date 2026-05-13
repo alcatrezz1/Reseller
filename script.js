@@ -250,6 +250,12 @@ document.addEventListener('touchstart', e => {
   }
 }, { passive: true });
 
+// ── Recommended carousel scroll ──
+function recScroll(dir) {
+  const c = document.getElementById('recCarousel');
+  if (c) c.scrollBy({ left: dir * 170, behavior: 'smooth' });
+}
+
 // ── Brand nav touch scroll ──
 const brandnav = document.getElementById('brandNav');
 if (brandnav) {
