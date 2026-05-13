@@ -888,7 +888,7 @@ function updateMbnAccount() {
     wrap.addEventListener('mouseenter', () => { if (!isMob()) { clearTimeout(hideTimer); openMega(); } });
     wrap.addEventListener('mouseleave', () => { if (!isMob()) hideTimer = setTimeout(() => { if (!mega.matches(':hover')) closeMega(); }, 150); });
     const catBtn = document.getElementById('hdrCatBtn');
-    if (catBtn) catBtn.addEventListener('click', () => { if (!isMob()) { isOpen ? closeMega() : openMega(); } });
+    if (catBtn) catBtn.addEventListener('click', () => { isOpen ? closeMega() : openMega(); });
   }
   mega.addEventListener('mouseenter', () => { if (!isMob()) clearTimeout(hideTimer); });
   mega.addEventListener('mouseleave', () => { if (!isMob()) hideTimer = setTimeout(closeMega, 150); });
