@@ -1447,13 +1447,13 @@ body.admin-logged .product-admin-delete { display: flex; }
 }
 .header-catalog-btn svg { width: 14px; height: 14px; }
 .call-btn {
-  padding: 0 16px;
-  height: 40px;
-  font-size: 14px;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 12px;
   white-space: nowrap;
-  gap: 7px;
+  gap: 5px;
 }
-.call-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+.call-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 .call-modal-error { font-size: 13px; color: #FF3B30; min-height: 18px; margin-bottom: 8px; text-align: center; }
 .call-success { text-align: center; padding: 16px 0 8px; }
 .call-success svg { color: #34C759; }
