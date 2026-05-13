@@ -1276,6 +1276,7 @@ body.admin-logged .product-admin-delete { display: flex; }
 .slide {
   min-width: 100%;
   height: 100%;
+  position: relative;
 }
 .promo-banner-section {
   padding: 40px 0 32px;
@@ -1502,6 +1503,7 @@ body.admin-logged .product-admin-delete { display: flex; }
   .slider-viewport { aspect-ratio: 4/3; }
   .slider-arrow { width: 36px; height: 36px; }
   .slider-arrow svg { width: 16px; height: 16px; }
+  .slide-cta-btn { font-size: 12px; padding: 10px 18px; gap: 6px; }
 
   .about-features {
     display: flex !important;
