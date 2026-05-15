@@ -5,7 +5,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --blur: 24px;
+  --blur: 16px;
   --glass-bg: rgba(255,255,255,0.10);
   --glass-border: rgba(255,255,255,0.22);
   --glass-shadow: 0 8px 32px rgba(0,0,0,0.28);
@@ -37,11 +37,12 @@ body {
 .bg-blob {
   position: fixed;
   border-radius: 50%;
-  filter: blur(120px);
+  filter: blur(70px);
   pointer-events: none;
   z-index: 0;
   opacity: 0.55;
   animation: blobFloat 12s ease-in-out infinite;
+  will-change: transform;
 }
 .blob-1 { width: 700px; height: 700px; background: radial-gradient(circle, #007AFF 0%, transparent 70%); top: -250px; left: -200px; }
 .blob-2 { width: 550px; height: 550px; background: radial-gradient(circle, #5856D6 0%, transparent 70%); top: 25%; right: -180px; animation-duration: 16s; animation-direction: reverse; }
@@ -88,6 +89,7 @@ body {
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border-bottom: 1px solid rgba(255,255,255,0.1);
+  will-change: transform;
 }
 .topbar-inner {
   max-width: 1200px;
@@ -145,6 +147,7 @@ body {
   border-right: none;
   border-radius: 0;
   box-shadow: none;
+  will-change: transform;
 }
 .header-inner {
   max-width: 1200px;
@@ -260,6 +263,7 @@ body {
   box-shadow: none;
   overflow-x: auto;
   scrollbar-width: none;
+  will-change: transform;
 }
 .brandnav::-webkit-scrollbar { display: none; }
 .brandnav-inner {
