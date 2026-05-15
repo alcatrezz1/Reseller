@@ -1497,6 +1497,12 @@ body.admin-logged .product-admin-delete { display: flex; }
   position: relative;
   z-index: 1;
 }
+#recommended {
+  padding-top: 20px;
+}
+#recommended .section-title {
+  margin-bottom: 20px;
+}
 .reviews-section {
   padding: 36px 0;
   position: relative;
