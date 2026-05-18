@@ -715,6 +715,7 @@ body {
 /* Brand sections */
 .brand-section { margin-bottom: 64px; }
 .brand-section:last-child { margin-bottom: 0; }
+.brand-section.brand-hidden { display: none; }
 .brand-section-header {
   display: flex;
   align-items: center;
