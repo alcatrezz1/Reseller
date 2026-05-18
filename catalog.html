@@ -283,6 +283,56 @@
     </div>
   </section>
 
+  <!-- ══ FILTERS ══ -->
+  <div class="catalog-filters-bar" id="catalogFiltersBar">
+    <div class="cf-group" id="cfGroupStorage">
+      <button class="cf-pill" type="button" onclick="toggleFilterPanel('cfGroupStorage')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="15" height="15"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+        <span class="cf-label">Память</span>
+        <span class="cf-count" id="cfCountStorage" style="display:none"></span>
+        <svg class="cf-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="cf-panel glass" id="cfPanelStorage">
+        <label class="cf-option"><input type="checkbox" data-filter-type="storage" value="128"><span>128 ГБ</span></label>
+        <label class="cf-option"><input type="checkbox" data-filter-type="storage" value="256"><span>256 ГБ</span></label>
+        <label class="cf-option"><input type="checkbox" data-filter-type="storage" value="512"><span>512 ГБ</span></label>
+        <label class="cf-option"><input type="checkbox" data-filter-type="storage" value="1024"><span>1 ТБ</span></label>
+      </div>
+    </div>
+    <div class="cf-group" id="cfGroupSim">
+      <button class="cf-pill" type="button" onclick="toggleFilterPanel('cfGroupSim')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="15" height="15"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 2v4h6V2"/></svg>
+        <span class="cf-label">SIM-карта</span>
+        <span class="cf-count" id="cfCountSim" style="display:none"></span>
+        <svg class="cf-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="cf-panel glass" id="cfPanelSim">
+        <label class="cf-option"><input type="checkbox" data-filter-type="sim" value="dual"><span>Dual SIM</span></label>
+        <label class="cf-option"><input type="checkbox" data-filter-type="sim" value="esim"><span>eSIM</span></label>
+      </div>
+    </div>
+    <div class="cf-group" id="cfGroupColor">
+      <button class="cf-pill" type="button" onclick="toggleFilterPanel('cfGroupColor')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="15" height="15"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20"/><path d="M2 12h20"/></svg>
+        <span class="cf-label">Цвет</span>
+        <span class="cf-count" id="cfCountColor" style="display:none"></span>
+        <svg class="cf-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="cf-panel glass" id="cfPanelColor">
+        <label class="cf-color-opt"><input type="checkbox" data-filter-type="color" value="black"><span class="cf-swatch" style="background:#1C1C1E"></span><span>Черный</span></label>
+        <label class="cf-color-opt"><input type="checkbox" data-filter-type="color" value="white"><span class="cf-swatch" style="background:#F5F5F0;border-color:rgba(255,255,255,0.15)"></span><span>Белый</span></label>
+        <label class="cf-color-opt"><input type="checkbox" data-filter-type="color" value="blue"><span class="cf-swatch" style="background:#3B7DD8"></span><span>Синий</span></label>
+        <label class="cf-color-opt"><input type="checkbox" data-filter-type="color" value="silver"><span class="cf-swatch" style="background:#C8C8D0"></span><span>Серебро</span></label>
+        <label class="cf-color-opt"><input type="checkbox" data-filter-type="color" value="beige"><span class="cf-swatch" style="background:#E8D5C0"></span><span>Бежевый</span></label>
+        <label class="cf-color-opt"><input type="checkbox" data-filter-type="color" value="green"><span class="cf-swatch" style="background:#30D158"></span><span>Зеленый</span></label>
+      </div>
+    </div>
+    <button class="cf-reset" id="cfReset" style="display:none" onclick="resetProductFilters()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Сбросить
+    </button>
+  </div>
+
   <!-- ══ CATALOG ══ -->
   <div class="catalog" id="catalog">
     <div class="container">
@@ -587,7 +637,7 @@
         </div>
       </div>
       <div class="products-grid">
-        <div class="product-card glass reveal" data-brand="xiaomi" data-series="xiaomi-phone">
+        <div class="product-card glass reveal" data-brand="xiaomi" data-series="xiaomi-phone" data-storage="256 512 1024" data-sim="dual" data-color="black white blue">
           <div class="product-badge badge-ultra">Ultra</div>
           <div class="product-visual">
             <div class="pv-frame" style="width:106px;height:196px;border-radius:22px;border-color:rgba(255,105,0,0.3);">
@@ -609,7 +659,7 @@
             </div>
           </div>
         </div>
-        <div class="product-card glass reveal" data-brand="xiaomi" data-series="redmi-phone">
+        <div class="product-card glass reveal" data-brand="xiaomi" data-series="redmi-phone" data-storage="128 256" data-sim="dual" data-color="black blue silver">
           <div class="product-badge badge-new">Хит</div>
           <div class="product-visual">
             <div class="pv-frame" style="width:106px;height:196px;border-radius:22px;border-color:rgba(255,170,0,0.3);">
@@ -644,7 +694,7 @@
         </div>
       </div>
       <div class="products-grid">
-        <div class="product-card glass reveal" data-brand="oneplus" data-series="oneplus-flagship">
+        <div class="product-card glass reveal" data-brand="oneplus" data-series="oneplus-flagship" data-storage="256 512" data-sim="dual" data-color="black white">
           <div class="product-badge badge-new">Новинка</div>
           <div class="product-visual">
             <div class="pv-frame" style="width:106px;height:196px;border-radius:22px;border-color:rgba(245,1,12,0.3);">
@@ -678,7 +728,7 @@
         </div>
       </div>
       <div class="products-grid">
-        <div class="product-card glass reveal featured-card" data-brand="google" data-series="pixel-9-pro">
+        <div class="product-card glass reveal featured-card" data-brand="google" data-series="pixel-9-pro" data-storage="128 256 512" data-sim="dual esim" data-color="black white beige green">
           <div class="product-badge badge-pro">Pro</div>
           <div class="product-visual">
             <div class="pv-frame" style="width:106px;height:196px;border-radius:18px;border-color:rgba(66,133,244,0.3);">
@@ -702,7 +752,7 @@
             </div>
           </div>
         </div>
-        <div class="product-card glass reveal" data-brand="google" data-series="pixel-9">
+        <div class="product-card glass reveal" data-brand="google" data-series="pixel-9" data-storage="128 256" data-sim="dual esim" data-color="black white beige green">
           <div class="product-badge badge-new">Новинка</div>
           <div class="product-visual">
             <div class="pv-frame" style="width:106px;height:196px;border-radius:18px;border-color:rgba(52,168,83,0.3);">

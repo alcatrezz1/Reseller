@@ -293,6 +293,7 @@ function filterBrand(brand, fromLoad) {
     document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   updateCatalogHero(brand);
+  applyProductFilters();
 }
 
 function filterSeries(series) {
@@ -314,6 +315,7 @@ function showAllBrands(updateHistory) {
     history.pushState({}, '', url);
   }
   updateCatalogHero(null);
+  applyProductFilters();
 }
 
 function updateCatalogHero(brand) {
@@ -357,6 +359,80 @@ window.addEventListener('popstate', () => {
   if (brand) filterBrand(brand, true);
   else showAllBrands(false);
 });
+
+// ── Product filters ──
+function toggleFilterPanel(groupId) {
+  const group = document.getElementById(groupId);
+  if (!group) return;
+  const isOpen = group.classList.contains('cf-open');
+  document.querySelectorAll('.cf-group.cf-open').forEach(g => g.classList.remove('cf-open'));
+  if (!isOpen) group.classList.add('cf-open');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.cf-group')) {
+    document.querySelectorAll('.cf-group.cf-open').forEach(g => g.classList.remove('cf-open'));
+  }
+});
+
+document.querySelectorAll('[data-filter-type]').forEach(cb => {
+  cb.addEventListener('change', applyProductFilters);
+});
+
+function getActiveFilters(type) {
+  return Array.from(document.querySelectorAll(`[data-filter-type="${type}"]:checked`)).map(el => el.value);
+}
+
+function applyProductFilters() {
+  const storage = getActiveFilters('storage');
+  const sim     = getActiveFilters('sim');
+  const color   = getActiveFilters('color');
+  const anyActive = storage.length || sim.length || color.length;
+
+  const resetBtn = document.getElementById('cfReset');
+  if (resetBtn) resetBtn.style.display = anyActive ? '' : 'none';
+
+  ['storage', 'sim', 'color'].forEach(type => {
+    const cnt = document.getElementById('cfCount' + type.charAt(0).toUpperCase() + type.slice(1));
+    const n = getActiveFilters(type).length;
+    if (cnt) { cnt.textContent = n || ''; cnt.style.display = n ? '' : 'none'; }
+    const pill = document.querySelector(`#cfGroup${type.charAt(0).toUpperCase() + type.slice(1)} .cf-pill`);
+    if (pill) pill.classList.toggle('cf-pill-active', n > 0);
+  });
+
+  document.querySelectorAll('.brand-section').forEach(section => {
+    if (section.classList.contains('brand-hidden')) return;
+    let visible = 0;
+    section.querySelectorAll('.product-card').forEach(card => {
+      const show = matchesProductFilters(card, storage, sim, color);
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    let noRes = section.querySelector('.cf-no-results');
+    if (!noRes) {
+      noRes = document.createElement('p');
+      noRes.className = 'cf-no-results';
+      noRes.textContent = 'Нет товаров с такими параметрами';
+      section.querySelector('.products-grid')?.after(noRes);
+    }
+    noRes.style.display = visible === 0 && anyActive ? '' : 'none';
+  });
+}
+
+function matchesProductFilters(card, storage, sim, color) {
+  const cs = card.dataset.storage ? card.dataset.storage.split(' ') : null;
+  const cm = card.dataset.sim     ? card.dataset.sim.split(' ')     : null;
+  const cc = card.dataset.color   ? card.dataset.color.split(' ')   : null;
+  if (storage.length && (!cs || !storage.some(v => cs.includes(v)))) return false;
+  if (sim.length     && (!cm || !sim.some(v => cm.includes(v))))     return false;
+  if (color.length   && (!cc || !color.some(v => cc.includes(v))))   return false;
+  return true;
+}
+
+function resetProductFilters() {
+  document.querySelectorAll('[data-filter-type]').forEach(cb => { cb.checked = false; });
+  applyProductFilters();
+}
 
 // ── Auth ──
 const ADMIN_CREDS = { username: 'admin', password: 'reseller2025' };
