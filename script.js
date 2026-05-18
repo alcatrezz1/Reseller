@@ -914,10 +914,7 @@ function updateMbnAccount() {
     const brand = btn.dataset.brand;
     const label = btn.querySelector('span.hmm-label')?.textContent?.trim() || brand;
     btn.addEventListener('mouseenter', () => { if (!isMob()) selectBrand(brand, label); });
-    btn.addEventListener('click', () => {
-      if (isMob()) selectBrand(brand, label);
-      else { filterBrand(brand); closeMega(); }
-    });
+    btn.addEventListener('click', () => { filterBrand(brand); closeMega(); });
   });
 
   if (hmmBack)  hmmBack.addEventListener('click', () => {
