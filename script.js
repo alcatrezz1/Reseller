@@ -292,6 +292,13 @@ function filterBrand(brand, fromLoad) {
   applyProductFilters();
 }
 
+const SERIES_TO_BRAND = {
+  'iphone': 'apple', 'ipad': 'apple', 'macbook': 'apple',
+  'apple-watch': 'apple', 'airpods': 'apple', 'mac': 'apple',
+  'galaxy-s': 'samsung', 'galaxy-a': 'samsung', 'galaxy-tab': 'samsung',
+  'galaxy-watch': 'samsung', 'galaxy-buds': 'samsung',
+};
+
 function filterSeries(series) {
   const card = document.querySelector('[data-series="' + series + '"]');
   if (card) {
@@ -299,6 +306,11 @@ function filterSeries(series) {
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
+  // If series has a known brand mapping, filter by brand instead
+  const brand = SERIES_TO_BRAND[series];
+  if (brand) { filterBrand(brand); return; }
+  // Prevent redirect loop: don't navigate if already on catalog with this series
+  if (new URLSearchParams(window.location.search).get('series') === series) return;
   window.location.href = 'catalog.html?series=' + series;
 }
 
