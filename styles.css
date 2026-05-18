@@ -2196,3 +2196,118 @@ body.admin-logged .product-admin-delete { display: flex; }
     background: rgba(14,14,22,0.99);
   }
 }
+
+/* ── Catalog filters ── */
+.catalog-filters-bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 10;
+}
+.cf-group { position: relative; }
+.cf-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.cf-pill:hover { background: rgba(255,255,255,0.14); }
+.cf-pill-active { background: rgba(0,122,255,0.18) !important; border-color: rgba(0,122,255,0.5) !important; color: #5AC8FA; }
+.cf-count {
+  background: var(--accent);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+.cf-chevron { transition: transform 0.2s; opacity: 0.6; }
+.cf-group.cf-open .cf-chevron { transform: rotate(180deg); }
+.cf-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 180px;
+  border-radius: 16px;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 100;
+}
+.cf-group.cf-open .cf-panel { display: flex; }
+.cf-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+.cf-option:hover { background: rgba(255,255,255,0.08); }
+.cf-option input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+.cf-color-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+.cf-color-opt:hover { background: rgba(255,255,255,0.08); }
+.cf-color-opt input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+.cf-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.25);
+}
+.cf-reset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 50px;
+  background: rgba(255,59,48,0.15);
+  border: 1px solid rgba(255,59,48,0.35);
+  color: #FF6B6B;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cf-reset:hover { background: rgba(255,59,48,0.25); }
+.cf-no-results {
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 20px 0;
+  display: none;
+}
