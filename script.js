@@ -224,22 +224,18 @@ document.querySelectorAll('.brand-item').forEach(item => {
     hideTimer = setTimeout(() => dropdown.classList.remove('is-open'), 120);
   };
 
-  item.addEventListener('mouseenter', show);
-  item.addEventListener('mouseleave', hide);
-  dropdown.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-  dropdown.addEventListener('mouseleave', hide);
+  // Desktop-only hover: on mobile, synthetic mouseenter from touch must not open dropdown
+  item.addEventListener('mouseenter', () => { if (window.innerWidth > 768) show(); });
+  item.addEventListener('mouseleave', () => { if (window.innerWidth > 768) hide(); });
+  dropdown.addEventListener('mouseenter', () => { if (window.innerWidth > 768) clearTimeout(hideTimer); });
+  dropdown.addEventListener('mouseleave', () => { if (window.innerWidth > 768) hide(); });
 
-  // Touch: перехватываем touchstart — до того как браузер симулирует mouseenter/click
+  // Mobile: close any open dropdown, then let the brand link href navigate directly
   const brandLink = item.querySelector('.brand-link');
   if (brandLink) {
-    brandLink.addEventListener('touchstart', e => {
-      if (!dropdown.classList.contains('is-open')) {
-        e.preventDefault(); // блокирует симуляцию mouseenter + click → нет перехода
-        document.querySelectorAll('.dropdown.is-open').forEach(d => d.classList.remove('is-open'));
-        show();
-      }
-      // dropdown уже открыт → не блокируем, браузер выполнит переход
-    }, { passive: false });
+    brandLink.addEventListener('touchstart', () => {
+      document.querySelectorAll('.dropdown.is-open').forEach(d => d.classList.remove('is-open'));
+    }, { passive: true });
   }
 });
 
