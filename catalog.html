@@ -258,17 +258,27 @@
       <nav class="breadcrumb">
         <a href="index.html">Главная</a>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-        <span>Каталог</span>
+        <a href="catalog.html" onclick="showAllBrands(); return false;">Каталог</a>
+        <span id="brandCrumbPart" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span id="brandCrumbName"></span>
+        </span>
       </nav>
       <div class="catalog-header reveal">
         <div>
-          <h1 class="section-title">Каталог</h1>
-          <p class="section-sub">Актуальные новинки в наличии</p>
+          <h1 class="section-title" id="catalogTitle">Каталог</h1>
+          <p class="section-sub" id="catalogSub">Актуальные новинки в наличии</p>
         </div>
-        <button class="add-product-btn btn-primary" id="addProductBtn" style="display:none" onclick="openAddProductModal()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Добавить товар
-        </button>
+        <div style="display:flex;gap:12px;align-items:center">
+          <button class="btn-ghost" id="allBrandsBtn" style="display:none" onclick="showAllBrands()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg>
+            Все бренды
+          </button>
+          <button class="add-product-btn btn-primary" id="addProductBtn" style="display:none" onclick="openAddProductModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Добавить товар
+          </button>
+        </div>
       </div>
     </div>
   </section>

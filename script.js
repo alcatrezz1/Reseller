@@ -276,15 +276,23 @@ if (brandnav) {
 }
 
 // ── Brand filter ──
-function filterBrand(brand) {
-  const section = document.getElementById('brand-' + brand);
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    document.querySelectorAll('.brand-link').forEach(l =>
-      l.classList.toggle('brand-active', l.dataset.brand === brand));
+function filterBrand(brand, fromLoad) {
+  if (!document.getElementById('brand-' + brand)) {
+    window.location.href = 'catalog.html?brand=' + encodeURIComponent(brand);
     return;
   }
-  window.location.href = 'catalog.html#brand-' + brand;
+  document.querySelectorAll('.brand-section').forEach(s =>
+    s.classList.toggle('brand-hidden', s.id !== 'brand-' + brand));
+  document.querySelectorAll('.brand-link').forEach(l =>
+    l.classList.toggle('brand-active', l.dataset.brand === brand));
+  if (!fromLoad) {
+    const url = new URL(window.location);
+    url.searchParams.set('brand', brand);
+    url.hash = '';
+    history.pushState({ brand }, '', url);
+    document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  updateCatalogHero(brand);
 }
 
 function filterSeries(series) {
@@ -297,10 +305,39 @@ function filterSeries(series) {
   window.location.href = 'catalog.html?series=' + series;
 }
 
-function showAllBrands() {
-  const catalogEl = document.getElementById('catalog');
-  if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth' });
+function showAllBrands(updateHistory) {
+  document.querySelectorAll('.brand-section').forEach(s => s.classList.remove('brand-hidden'));
   document.querySelectorAll('.brand-link').forEach(l => l.classList.remove('brand-active'));
+  if (updateHistory !== false) {
+    const url = new URL(window.location);
+    url.searchParams.delete('brand');
+    history.pushState({}, '', url);
+  }
+  updateCatalogHero(null);
+}
+
+function updateCatalogHero(brand) {
+  const title = document.getElementById('catalogTitle');
+  if (!title) return;
+  const sub       = document.getElementById('catalogSub');
+  const allBtn    = document.getElementById('allBrandsBtn');
+  const crumbPart = document.getElementById('brandCrumbPart');
+  const crumbName = document.getElementById('brandCrumbName');
+  if (brand) {
+    const name = BRAND_NAMES[brand] || brand;
+    title.textContent = name;
+    if (sub) sub.textContent = 'Товары бренда ' + name;
+    if (allBtn) allBtn.style.display = '';
+    if (crumbPart) crumbPart.style.display = '';
+    if (crumbName) crumbName.textContent = name;
+    document.title = name + ' — re:Seller · Брендовая техника · Самара';
+  } else {
+    title.textContent = 'Каталог';
+    if (sub) sub.textContent = 'Актуальные новинки в наличии';
+    if (allBtn) allBtn.style.display = 'none';
+    if (crumbPart) crumbPart.style.display = 'none';
+    document.title = 'Каталог — re:Seller · Брендовая техника · Самара';
+  }
 }
 
 // ── Apply ?series= or ?brand= URL param, or #brand-X hash on catalog load ──
@@ -309,11 +346,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const series = params.get('series');
   const brand  = params.get('brand');
   if (series) filterSeries(series);
-  else if (brand) filterBrand(brand);
+  else if (brand) filterBrand(brand, true);
   else if (window.location.hash && window.location.hash.startsWith('#brand-')) {
-    const section = document.querySelector(window.location.hash);
-    if (section) setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    filterBrand(window.location.hash.replace('#brand-', ''), true);
   }
+});
+
+window.addEventListener('popstate', () => {
+  const brand = new URLSearchParams(window.location.search).get('brand');
+  if (brand) filterBrand(brand, true);
+  else showAllBrands(false);
 });
 
 // ── Auth ──
