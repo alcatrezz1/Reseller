@@ -2317,9 +2317,7 @@ body.admin-logged .product-admin-delete { display: flex; }
 .ditem-wrap-sm { position: relative; }
 
 .sub-dropdown {
-  position: absolute;
-  left: calc(100% + 6px);
-  top: -8px;
+  position: fixed;
   min-width: 195px;
   padding: 8px;
   background: rgba(14,14,20,0.98);
@@ -2333,19 +2331,16 @@ body.admin-logged .product-admin-delete { display: flex; }
   pointer-events: none;
   transform: translateX(-6px);
   transition: opacity 0.15s ease, visibility 0.15s, transform 0.15s ease;
-  transition-delay: 0.12s;
-  z-index: 310;
+  z-index: 350;
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
-.ditem-wrap:hover .sub-dropdown,
-.ditem-wrap-sm:hover .sub-dropdown {
+.sub-dropdown.is-open {
   opacity: 1;
   visibility: visible;
   pointer-events: all;
   transform: translateX(0);
-  transition-delay: 0s;
 }
 .sub-item {
   display: block;
@@ -2362,6 +2357,8 @@ body.admin-logged .product-admin-delete { display: flex; }
   background: rgba(255,255,255,0.09);
   color: var(--text);
 }
+/* Series-level card filter */
+.series-hidden { display: none !important; }
 @media (max-width: 768px) {
   .sub-dropdown {
     backdrop-filter: none;
