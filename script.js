@@ -284,9 +284,9 @@ function filterBrand(brand, fromLoad) {
   if (!fromLoad) {
     const url = new URL(window.location);
     url.searchParams.set('brand', brand);
+    url.searchParams.delete('series');
     url.hash = '';
     history.pushState({ brand }, '', url);
-    document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   updateCatalogHero(brand);
   applyProductFilters();
@@ -300,16 +300,24 @@ const SERIES_TO_BRAND = {
 };
 
 function filterSeries(series) {
-  const card = document.querySelector('[data-series="' + series + '"]');
-  if (card) {
-    const section = card.closest('.brand-section') || document.getElementById('catalog');
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // 1. If the series maps to a known brand — filter by brand first (always)
+  const brand = SERIES_TO_BRAND[series];
+  if (brand) {
+    filterBrand(brand);
+    // Then scroll to the specific card if it is now visible
+    const card = document.querySelector('[data-series="' + series + '"]');
+    if (card && !card.closest('.brand-section')?.classList.contains('brand-hidden')) {
+      setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    }
     return;
   }
-  // If series has a known brand mapping, filter by brand instead
-  const brand = SERIES_TO_BRAND[series];
-  if (brand) { filterBrand(brand); return; }
-  // Prevent redirect loop: don't navigate if already on catalog with this series
+  // 2. No brand mapping — look for visible card and scroll to it
+  const card = document.querySelector('[data-series="' + series + '"]');
+  if (card && !card.closest('.brand-section')?.classList.contains('brand-hidden')) {
+    card.closest('.brand-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  // 3. Prevent redirect loop: don't navigate if already on catalog with this series
   if (new URLSearchParams(window.location.search).get('series') === series) return;
   window.location.href = 'catalog.html?series=' + series;
 }
