@@ -224,22 +224,18 @@ document.querySelectorAll('.brand-item').forEach(item => {
     hideTimer = setTimeout(() => dropdown.classList.remove('is-open'), 120);
   };
 
-  item.addEventListener('mouseenter', show);
-  item.addEventListener('mouseleave', hide);
-  dropdown.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-  dropdown.addEventListener('mouseleave', hide);
+  // Desktop-only hover: on mobile, synthetic mouseenter from touch must not open dropdown
+  item.addEventListener('mouseenter', () => { if (window.innerWidth > 768) show(); });
+  item.addEventListener('mouseleave', () => { if (window.innerWidth > 768) hide(); });
+  dropdown.addEventListener('mouseenter', () => { if (window.innerWidth > 768) clearTimeout(hideTimer); });
+  dropdown.addEventListener('mouseleave', () => { if (window.innerWidth > 768) hide(); });
 
-  // Touch: перехватываем touchstart — до того как браузер симулирует mouseenter/click
+  // Mobile: close any open dropdown, then let the brand link href navigate directly
   const brandLink = item.querySelector('.brand-link');
   if (brandLink) {
-    brandLink.addEventListener('touchstart', e => {
-      if (!dropdown.classList.contains('is-open')) {
-        e.preventDefault(); // блокирует симуляцию mouseenter + click → нет перехода
-        document.querySelectorAll('.dropdown.is-open').forEach(d => d.classList.remove('is-open'));
-        show();
-      }
-      // dropdown уже открыт → не блокируем, браузер выполнит переход
-    }, { passive: false });
+    brandLink.addEventListener('touchstart', () => {
+      document.querySelectorAll('.dropdown.is-open').forEach(d => d.classList.remove('is-open'));
+    }, { passive: true });
   }
 });
 
@@ -288,21 +284,41 @@ function filterBrand(brand, fromLoad) {
   if (!fromLoad) {
     const url = new URL(window.location);
     url.searchParams.set('brand', brand);
+    url.searchParams.delete('series');
     url.hash = '';
     history.pushState({ brand }, '', url);
-    document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   updateCatalogHero(brand);
   applyProductFilters();
 }
 
+const SERIES_TO_BRAND = {
+  'iphone': 'apple', 'ipad': 'apple', 'macbook': 'apple',
+  'apple-watch': 'apple', 'airpods': 'apple', 'mac': 'apple',
+  'galaxy-s': 'samsung', 'galaxy-a': 'samsung', 'galaxy-tab': 'samsung',
+  'galaxy-watch': 'samsung', 'galaxy-buds': 'samsung',
+};
+
 function filterSeries(series) {
-  const card = document.querySelector('[data-series="' + series + '"]');
-  if (card) {
-    const section = card.closest('.brand-section') || document.getElementById('catalog');
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // 1. If the series maps to a known brand — filter by brand first (always)
+  const brand = SERIES_TO_BRAND[series];
+  if (brand) {
+    filterBrand(brand);
+    // Then scroll to the specific card if it is now visible
+    const card = document.querySelector('[data-series="' + series + '"]');
+    if (card && !card.closest('.brand-section')?.classList.contains('brand-hidden')) {
+      setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    }
     return;
   }
+  // 2. No brand mapping — look for visible card and scroll to it
+  const card = document.querySelector('[data-series="' + series + '"]');
+  if (card && !card.closest('.brand-section')?.classList.contains('brand-hidden')) {
+    card.closest('.brand-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  // 3. Prevent redirect loop: don't navigate if already on catalog with this series
+  if (new URLSearchParams(window.location.search).get('series') === series) return;
   window.location.href = 'catalog.html?series=' + series;
 }
 
