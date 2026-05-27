@@ -223,6 +223,8 @@ document.querySelectorAll('.brand-item').forEach(item => {
   const hide = () => {
     hideTimer = setTimeout(() => dropdown.classList.remove('is-open'), 120);
   };
+  // Expose cancel so sub-dropdowns can keep this dropdown open
+  dropdown._cancelHide = () => clearTimeout(hideTimer);
 
   // Desktop-only hover: on mobile, synthetic mouseenter from touch must not open dropdown
   item.addEventListener('mouseenter', () => { if (window.innerWidth > 768) show(); });
@@ -237,6 +239,45 @@ document.querySelectorAll('.brand-item').forEach(item => {
       document.querySelectorAll('.dropdown.is-open').forEach(d => d.classList.remove('is-open'));
     }, { passive: true });
   }
+});
+
+// ── Sub-dropdown portals (backdrop-filter on parent dropdown would clip overflow) ──
+document.querySelectorAll('.ditem-wrap, .ditem-wrap-sm').forEach(wrap => {
+  const subDrop = wrap.querySelector('.sub-dropdown');
+  if (!subDrop) return;
+
+  document.body.appendChild(subDrop);
+
+  let subTimer;
+
+  const showSub = () => {
+    if (window.innerWidth <= 768) return;
+    clearTimeout(subTimer);
+    const rect = wrap.getBoundingClientRect();
+    let left = rect.right + 6;
+    let top = rect.top - 8;
+    // Flip left if overflows right edge of viewport
+    if (left + 210 > window.innerWidth - 8) left = rect.left - 210;
+    // Clamp top to viewport
+    if (top < 8) top = 8;
+    subDrop.style.left = left + 'px';
+    subDrop.style.top  = top + 'px';
+    subDrop.classList.add('is-open');
+  };
+
+  const hideSub = () => {
+    subTimer = setTimeout(() => subDrop.classList.remove('is-open'), 120);
+  };
+
+  wrap.addEventListener('mouseenter', showSub);
+  wrap.addEventListener('mouseleave', hideSub);
+  subDrop.addEventListener('mouseenter', () => {
+    if (window.innerWidth <= 768) return;
+    clearTimeout(subTimer);
+    // Keep the parent brand dropdown open while cursor is in sub-dropdown
+    document.querySelectorAll('.dropdown.is-open').forEach(d => d._cancelHide && d._cancelHide());
+  });
+  subDrop.addEventListener('mouseleave', hideSub);
 });
 
 // Закрыть dropdown при тапе вне него
@@ -273,6 +314,8 @@ if (brandnav) {
 
 // ── Brand filter ──
 function filterBrand(brand, fromLoad) {
+  // Clear any series-level card filtering
+  document.querySelectorAll('.series-hidden').forEach(c => c.classList.remove('series-hidden'));
   if (!document.getElementById('brand-' + brand)) {
     window.location.href = 'catalog.html?brand=' + encodeURIComponent(brand);
     return;
@@ -299,30 +342,43 @@ const SERIES_TO_BRAND = {
   'galaxy-watch': 'samsung', 'galaxy-buds': 'samsung',
 };
 
-function filterSeries(series) {
-  // 1. If the series maps to a known brand — filter by brand first (always)
+function filterSeries(series, fromLoad) {
   const brand = SERIES_TO_BRAND[series];
   if (brand) {
-    filterBrand(brand);
-    // Then scroll to the specific card if it is now visible
-    const card = document.querySelector('[data-series="' + series + '"]');
-    if (card && !card.closest('.brand-section')?.classList.contains('brand-hidden')) {
-      setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    if (!document.getElementById('brand-' + brand)) {
+      window.location.href = 'catalog.html?series=' + series;
+      return;
     }
+    // Show only the brand section (without resetting series filter)
+    document.querySelectorAll('.brand-section').forEach(s =>
+      s.classList.toggle('brand-hidden', s.id !== 'brand-' + brand));
+    document.querySelectorAll('.brand-link').forEach(l =>
+      l.classList.toggle('brand-active', l.dataset.brand === brand));
+    // Within the section, hide all cards that don't belong to this series
+    const section = document.getElementById('brand-' + brand);
+    if (section) {
+      section.querySelectorAll('[data-series]').forEach(card => {
+        card.classList.toggle('series-hidden', card.dataset.series !== series);
+      });
+    }
+    if (!fromLoad) {
+      const url = new URL(window.location);
+      url.searchParams.set('series', series);
+      url.searchParams.delete('brand');
+      url.hash = '';
+      history.pushState({ series }, '', url);
+    }
+    updateCatalogHero(brand);
+    applyProductFilters();
     return;
   }
-  // 2. No brand mapping — look for visible card and scroll to it
-  const card = document.querySelector('[data-series="' + series + '"]');
-  if (card && !card.closest('.brand-section')?.classList.contains('brand-hidden')) {
-    card.closest('.brand-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    return;
-  }
-  // 3. Prevent redirect loop: don't navigate if already on catalog with this series
+  // No brand mapping — prevent loop and navigate
   if (new URLSearchParams(window.location.search).get('series') === series) return;
   window.location.href = 'catalog.html?series=' + series;
 }
 
 function showAllBrands(updateHistory) {
+  document.querySelectorAll('.series-hidden').forEach(c => c.classList.remove('series-hidden'));
   document.querySelectorAll('.brand-section').forEach(s => s.classList.remove('brand-hidden'));
   document.querySelectorAll('.brand-link').forEach(l => l.classList.remove('brand-active'));
   if (updateHistory !== false) {
@@ -371,8 +427,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('popstate', () => {
-  const brand = new URLSearchParams(window.location.search).get('brand');
-  if (brand) filterBrand(brand, true);
+  const params = new URLSearchParams(window.location.search);
+  const brand  = params.get('brand');
+  const series = params.get('series');
+  if (series) filterSeries(series, true);
+  else if (brand) filterBrand(brand, true);
   else showAllBrands(false);
 });
 
@@ -420,7 +479,7 @@ function applyProductFilters() {
     if (section.classList.contains('brand-hidden')) return;
     let visible = 0;
     section.querySelectorAll('.product-card').forEach(card => {
-      const show = matchesProductFilters(card, storage, sim, color);
+      const show = matchesProductFilters(card, storage, sim, color) && !card.classList.contains('series-hidden');
       card.style.display = show ? '' : 'none';
       if (show) visible++;
     });
