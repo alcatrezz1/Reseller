@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Header, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from sqlalchemy import create_engine, Column, Integer, String, Float, Text, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
@@ -196,6 +197,10 @@ def delete_banner(banner_id: int, db: Session = Depends(get_db)):
 # ════════════════════════════════
 # ── Upload ──
 # ════════════════════════════════
+
+@app.get("/admin")
+def admin_page():
+    return FileResponse("/var/www/reseller/admin.html")
 
 @app.post("/api/upload", dependencies=[Depends(check_admin)])
 async def upload_image(file: UploadFile = File(...)):
