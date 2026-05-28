@@ -184,6 +184,16 @@ tr:hover td { background: rgba(255,255,255,0.015); }
 }
 .img-preview-box.visible { display: flex; }
 .img-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+.img-input-group { display: flex; gap: 8px; align-items: stretch; }
+.img-input-group input { flex: 1; margin-bottom: 0; }
+.btn-upload {
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border);
+  color: var(--text); border-radius: 10px; padding: 0 14px;
+  font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.btn-upload:hover { background: rgba(0,122,255,0.12); border-color: var(--accent); color: var(--accent); }
+.btn-upload.loading { opacity: 0.6; pointer-events: none; }
 
 /* ── Toast ── */
 .toast {
@@ -290,9 +300,13 @@ tr:hover td { background: rgba(255,255,255,0.015); }
       <input type="number" id="pPrice" placeholder="89990">
     </div>
     <div class="form-row">
-      <label>Фото (URL)</label>
-      <input type="text" id="pImage" placeholder="https://example.com/photo.jpg" oninput="previewImg('pImage','pImagePreview')">
-      <div class="img-preview-box" id="pImagePreview"><img id="pImagePreviewImg" alt=""></div>
+      <label>Фото</label>
+      <div class="img-input-group">
+        <input type="text" id="pImage" placeholder="https://example.com/photo.jpg" oninput="previewImg('pImage','pImagePreview')">
+        <button class="btn-upload" id="pUploadBtn" onclick="triggerUpload('pFileInput','pUploadBtn')">Загрузить с ПК</button>
+      </div>
+      <input type="file" id="pFileInput" accept="image/*" style="display:none" onchange="uploadImage(this,'pImage','pImagePreview','pUploadBtn')">
+      <div class="img-preview-box" id="pImagePreview"><img alt=""></div>
     </div>
     <div class="form-row">
       <label>Хранилище (через пробел)</label>
@@ -349,9 +363,13 @@ tr:hover td { background: rgba(255,255,255,0.015); }
       <input type="text" id="bSubtitle" placeholder="Доступен к заказу в Самаре">
     </div>
     <div class="form-row">
-      <label>Изображение (URL)</label>
-      <input type="text" id="bImage" placeholder="https://example.com/banner.jpg" oninput="previewImg('bImage','bImagePreview')">
-      <div class="img-preview-box" id="bImagePreview"><img id="bImagePreviewImg" alt=""></div>
+      <label>Изображение</label>
+      <div class="img-input-group">
+        <input type="text" id="bImage" placeholder="https://example.com/banner.jpg" oninput="previewImg('bImage','bImagePreview')">
+        <button class="btn-upload" id="bUploadBtn" onclick="triggerUpload('bFileInput','bUploadBtn')">Загрузить с ПК</button>
+      </div>
+      <input type="file" id="bFileInput" accept="image/*" style="display:none" onchange="uploadImage(this,'bImage','bImagePreview','bUploadBtn')">
+      <div class="img-preview-box" id="bImagePreview"><img alt=""></div>
     </div>
     <div class="form-2col">
       <div class="form-row">
@@ -659,6 +677,38 @@ async function deleteBanner(id, title) {
     toast('Баннер удалён');
     loadBanners();
   } catch(e) { toast('Ошибка удаления', 'error'); }
+}
+
+// ── Image upload ──
+function triggerUpload(fileInputId, btnId) {
+  document.getElementById(fileInputId).click();
+}
+
+async function uploadImage(fileInput, inputId, previewId, btnId) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const btn = document.getElementById(btnId);
+  btn.textContent = 'Загрузка...';
+  btn.classList.add('loading');
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    const res = await fetch(API + '/api/upload', {
+      method: 'POST',
+      headers: { 'X-Admin-Key': adminKey },
+      body: formData,
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    document.getElementById(inputId).value = data.url;
+    previewImg(inputId, previewId);
+    toast('Фото загружено ✓');
+  } catch(e) {
+    toast('Ошибка загрузки файла', 'error');
+  }
+  btn.textContent = 'Загрузить с ПК';
+  btn.classList.remove('loading');
+  fileInput.value = '';
 }
 
 // ── Helpers ──

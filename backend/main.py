@@ -1,10 +1,13 @@
-from fastapi import FastAPI, HTTPException, Header, Depends
+from fastapi import FastAPI, HTTPException, Header, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine, Column, Integer, String, Float, Text, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel
 from typing import Optional
+from pathlib import Path
+import uuid
 import os
 
 app = FastAPI(title="re:Seller API")
@@ -18,6 +21,10 @@ app.add_middleware(
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://reseller:ТВОЙ_ПАРОЛЬ@localhost/reseller_db")
 ADMIN_KEY    = os.getenv("ADMIN_KEY", "reseller2025")
+
+UPLOAD_DIR = Path("/var/www/reseller/uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 engine        = create_engine(DATABASE_URL)
 SessionLocal  = sessionmaker(bind=engine, autocommit=False, autoflush=False)
@@ -185,3 +192,18 @@ def delete_banner(banner_id: int, db: Session = Depends(get_db)):
     db.delete(banner)
     db.commit()
     return {"ok": True}
+
+# ════════════════════════════════
+# ── Upload ──
+# ════════════════════════════════
+
+@app.post("/api/upload", dependencies=[Depends(check_admin)])
+async def upload_image(file: UploadFile = File(...)):
+    ext = file.filename.rsplit(".", 1)[-1].lower()
+    if ext not in ("jpg", "jpeg", "png", "webp", "gif"):
+        raise HTTPException(status_code=400, detail="Invalid file type")
+    filename = f"{uuid.uuid4()}.{ext}"
+    filepath = UPLOAD_DIR / filename
+    with open(filepath, "wb") as f:
+        f.write(await file.read())
+    return {"url": f"http://186.246.9.150:8000/uploads/{filename}"}
