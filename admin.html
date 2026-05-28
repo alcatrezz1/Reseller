@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админ — re:Seller</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface2: #1c1c26;
+  --border: rgba(255,255,255,0.1);
+  --text: #f2f2f7;
+  --text-muted: rgba(242,242,247,0.5);
+  --accent: #007AFF;
+  --red: #FF3B30;
+  --green: #34C759;
+  --radius: 12px;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif; min-height: 100vh; }
+
+/* ── Login ── */
+#loginOverlay {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.login-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+  padding: 40px; width: 360px;
+}
+.login-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.login-box p { color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+.login-box input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px; color: var(--text); font-size: 15px;
+  margin-bottom: 12px; outline: none; transition: border-color 0.15s;
+}
+.login-box input:focus { border-color: var(--accent); }
+#loginError { color: var(--red); font-size: 13px; margin-top: 10px; text-align: center; min-height: 18px; }
+
+/* ── Buttons ── */
+.btn-primary {
+  width: 100%; background: var(--accent); color: #fff; border: none;
+  border-radius: 10px; padding: 13px; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-add {
+  background: var(--accent); color: #fff; border: none; border-radius: 10px;
+  padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.15s;
+}
+.btn-add:hover { opacity: 0.85; }
+.btn-logout {
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border);
+  color: var(--text-muted); border-radius: 8px; padding: 7px 14px;
+  font-size: 13px; cursor: pointer; transition: all 0.15s;
+}
+.btn-logout:hover { background: rgba(255,59,48,0.12); color: var(--red); border-color: rgba(255,59,48,0.4); }
+.btn-edit {
+  background: rgba(0,122,255,0.12); color: var(--accent); border: none;
+  border-radius: 7px; padding: 6px 12px; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-edit:hover { background: rgba(0,122,255,0.22); }
+.btn-delete {
+  background: rgba(255,59,48,0.1); color: var(--red); border: none;
+  border-radius: 7px; padding: 6px 12px; font-size: 12px; font-weight: 600;
+  cursor: pointer; margin-left: 6px; transition: background 0.15s;
+}
+.btn-delete:hover { background: rgba(255,59,48,0.22); }
+.btn-cancel {
+  background: rgba(255,255,255,0.07); border: 1px solid var(--border);
+  color: var(--text-muted); border-radius: 10px; padding: 10px 18px;
+  font-size: 14px; cursor: pointer; transition: background 0.15s;
+}
+.btn-cancel:hover { background: rgba(255,255,255,0.11); }
+.btn-save {
+  background: var(--accent); color: #fff; border: none; border-radius: 10px;
+  padding: 10px 22px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.15s;
+}
+.btn-save:hover { opacity: 0.85; }
+
+/* ── Layout ── */
+#adminUI { display: none; min-height: 100vh; }
+header {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+header h1 { font-size: 17px; font-weight: 700; }
+nav {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 28px; display: flex; gap: 4px;
+}
+.nav-tab {
+  background: none; border: none; color: var(--text-muted); padding: 14px 18px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s;
+}
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { padding: 28px; display: none; max-width: 1200px; }
+.tab-content.active { display: block; }
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+}
+.toolbar h2 { font-size: 20px; font-weight: 700; }
+
+/* ── Table ── */
+.table-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; }
+th {
+  background: var(--surface2); padding: 12px 16px; text-align: left;
+  font-size: 11px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.6px; white-space: nowrap;
+}
+td { padding: 12px 16px; border-top: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+tr:hover td { background: rgba(255,255,255,0.015); }
+.product-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
+.product-img-ph {
+  width: 44px; height: 44px; border-radius: 8px; background: var(--surface2);
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.badge {
+  background: rgba(0,122,255,0.14); color: var(--accent);
+  border-radius: 6px; padding: 3px 8px; font-size: 12px; font-weight: 600;
+}
+.price { font-weight: 700; }
+.empty-state { padding: 56px 20px; text-align: center; color: var(--text-muted); font-size: 15px; }
+
+/* ── Banners grid ── */
+.banners-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.banner-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.banner-preview {
+  height: 140px; background: var(--surface2); position: relative;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.banner-preview img { width: 100%; height: 100%; object-fit: cover; }
+.banner-preview-ph { color: var(--text-muted); font-size: 13px; }
+.banner-inactive-badge {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,0.75); color: var(--text-muted);
+  border-radius: 6px; padding: 3px 8px; font-size: 11px;
+}
+.banner-body { padding: 14px; }
+.banner-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.banner-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.banner-btn-hint { font-size: 12px; color: var(--accent); margin-bottom: 12px; }
+.banner-actions { display: flex; gap: 8px; }
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.72);
+  display: none; align-items: center; justify-content: center; z-index: 200;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+  padding: 28px; width: 540px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+}
+.modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 22px; }
+.form-row { margin-bottom: 14px; }
+.form-row label {
+  display: block; font-size: 11px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+}
+.form-row input, .form-row select, .form-row textarea {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 13px; color: var(--text); font-size: 14px;
+  outline: none; transition: border-color 0.15s; font-family: inherit;
+}
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--accent); }
+.form-row select option { background: #1c1c26; }
+.form-row textarea { resize: vertical; min-height: 80px; }
+.form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+.img-preview-box {
+  margin-top: 8px; border-radius: 10px; overflow: hidden;
+  height: 120px; background: var(--surface2); display: none;
+  align-items: center; justify-content: center;
+}
+.img-preview-box.visible { display: flex; }
+.img-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 18px; font-size: 14px;
+  z-index: 999; transform: translateY(80px); opacity: 0;
+  transition: all 0.25s; pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { border-color: var(--green); color: var(--green); }
+.toast.error { border-color: var(--red); color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- ── Login ── -->
+<div id="loginOverlay">
+  <div class="login-box">
+    <h2>re:Seller</h2>
+    <p>Панель управления</p>
+    <input type="text" id="loginUsername" placeholder="Логин" autocomplete="username">
+    <input type="password" id="loginPassword" placeholder="Пароль" autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-primary" onclick="doLogin()">Войти</button>
+    <p id="loginError"></p>
+  </div>
+</div>
+
+<!-- ── Admin UI ── -->
+<div id="adminUI">
+  <header>
+    <h1>re:Seller — Панель управления</h1>
+    <button class="btn-logout" onclick="logout()">Выйти</button>
+  </header>
+  <nav>
+    <button class="nav-tab active" data-tab="products" onclick="showTab(this)">Товары</button>
+    <button class="nav-tab" data-tab="banners" onclick="showTab(this)">Баннеры</button>
+  </nav>
+
+  <!-- Products tab -->
+  <div id="tabProducts" class="tab-content active">
+    <div class="toolbar">
+      <h2>Товары</h2>
+      <button class="btn-add" onclick="openProductModal()">+ Добавить товар</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Фото</th>
+            <th>Название</th>
+            <th>Бренд</th>
+            <th>Серия</th>
+            <th>Цена</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="productsTable"><tr><td colspan="6"><div class="empty-state">Загрузка...</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Banners tab -->
+  <div id="tabBanners" class="tab-content">
+    <div class="toolbar">
+      <h2>Баннеры карусели</h2>
+      <button class="btn-add" onclick="openBannerModal()">+ Добавить баннер</button>
+    </div>
+    <div id="bannersGrid" class="banners-grid"></div>
+  </div>
+</div>
+
+<!-- ── Product Modal ── -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <h3 id="productModalTitle">Добавить товар</h3>
+    <input type="hidden" id="productId">
+    <div class="form-row">
+      <label>Название</label>
+      <input type="text" id="pName" placeholder="Например: iPhone 17 Pro Max">
+    </div>
+    <div class="form-2col">
+      <div class="form-row">
+        <label>Бренд</label>
+        <select id="pBrand">
+          <option value="apple">Apple</option>
+          <option value="samsung">Samsung</option>
+          <option value="dyson">Dyson</option>
+          <option value="playstation">PlayStation</option>
+          <option value="honor">Honor</option>
+          <option value="xiaomi">Xiaomi</option>
+          <option value="oneplus">OnePlus</option>
+          <option value="google">Google</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Серия (slug)</label>
+        <input type="text" id="pSeries" placeholder="iphone, galaxy-s, macbook...">
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Цена (₽)</label>
+      <input type="number" id="pPrice" placeholder="89990">
+    </div>
+    <div class="form-row">
+      <label>Фото (URL)</label>
+      <input type="text" id="pImage" placeholder="https://example.com/photo.jpg" oninput="previewImg('pImage','pImagePreview')">
+      <div class="img-preview-box" id="pImagePreview"><img id="pImagePreviewImg" alt=""></div>
+    </div>
+    <div class="form-row">
+      <label>Хранилище (через пробел)</label>
+      <input type="text" id="pStorage" placeholder="128 256 512 1024">
+    </div>
+    <div class="form-2col">
+      <div class="form-row">
+        <label>Цвет (через пробел)</label>
+        <input type="text" id="pColor" placeholder="black white blue green">
+      </div>
+      <div class="form-row">
+        <label>SIM</label>
+        <input type="text" id="pSim" placeholder="dual esim">
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Описание</label>
+      <textarea id="pDesc" placeholder="Краткое описание товара"></textarea>
+    </div>
+    <div class="form-2col">
+      <div class="form-row">
+        <label>Раздел "Рекомендуем"</label>
+        <select id="pFeatured">
+          <option value="false">Нет</option>
+          <option value="true">Да</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Раздел "Новинки"</label>
+        <select id="pNew">
+          <option value="false">Нет</option>
+          <option value="true">Да</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeProductModal()">Отмена</button>
+      <button class="btn-save" onclick="saveProduct()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Banner Modal ── -->
+<div class="modal-overlay" id="bannerModal">
+  <div class="modal">
+    <h3 id="bannerModalTitle">Добавить баннер</h3>
+    <input type="hidden" id="bannerId">
+    <div class="form-row">
+      <label>Заголовок</label>
+      <input type="text" id="bTitle" placeholder="Новинка: iPhone 17 Pro">
+    </div>
+    <div class="form-row">
+      <label>Подзаголовок</label>
+      <input type="text" id="bSubtitle" placeholder="Доступен к заказу в Самаре">
+    </div>
+    <div class="form-row">
+      <label>Изображение (URL)</label>
+      <input type="text" id="bImage" placeholder="https://example.com/banner.jpg" oninput="previewImg('bImage','bImagePreview')">
+      <div class="img-preview-box" id="bImagePreview"><img id="bImagePreviewImg" alt=""></div>
+    </div>
+    <div class="form-2col">
+      <div class="form-row">
+        <label>Текст кнопки</label>
+        <input type="text" id="bBtnText" placeholder="Подробнее">
+      </div>
+      <div class="form-row">
+        <label>Ссылка кнопки</label>
+        <input type="text" id="bBtnUrl" placeholder="catalog.html?brand=apple">
+      </div>
+    </div>
+    <div class="form-2col">
+      <div class="form-row">
+        <label>Порядок отображения</label>
+        <input type="number" id="bOrder" value="0">
+      </div>
+      <div class="form-row">
+        <label>Активен</label>
+        <select id="bActive">
+          <option value="true">Да</option>
+          <option value="false">Нет</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeBannerModal()">Отмена</button>
+      <button class="btn-save" onclick="saveBanner()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://186.246.9.150:8000';
+const ADMIN_USERNAME = 'admin';
+const ADMIN_PASSWORD = 'reseller2025';
+let adminKey = sessionStorage.getItem('adminKey') || '';
+
+if (adminKey) initAdmin();
+
+// ── Auth ──
+async function doLogin() {
+  const u = document.getElementById('loginUsername').value.trim();
+  const p = document.getElementById('loginPassword').value.trim();
+  if (u !== ADMIN_USERNAME || p !== ADMIN_PASSWORD) {
+    document.getElementById('loginError').textContent = 'Неверный логин или пароль';
+    return;
+  }
+  sessionStorage.setItem('adminKey', p);
+  adminKey = p;
+  initAdmin();
+}
+
+function initAdmin() {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('adminUI').style.display = 'block';
+  loadProducts();
+  loadBanners();
+}
+
+function logout() {
+  sessionStorage.removeItem('adminKey');
+  location.reload();
+}
+
+// ── API ──
+async function apiFetch(path, options = {}) {
+  const res = await fetch(API + path, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', 'X-Admin-Key': adminKey, ...(options.headers || {}) },
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+// ── Tabs ──
+function showTab(btn) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab' + btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1)).classList.add('active');
+}
+
+// ── Toast ──
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'toast ' + type + ' show';
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── Image preview ──
+function previewImg(inputId, boxId) {
+  const url = document.getElementById(inputId).value;
+  const box = document.getElementById(boxId);
+  const img = box.querySelector('img');
+  if (url) { img.src = url; box.classList.add('visible'); }
+  else box.classList.remove('visible');
+}
+
+// ════════════════════════════════
+// ── PRODUCTS ──
+// ════════════════════════════════
+let editingProductId = null;
+
+async function loadProducts() {
+  try {
+    const list = await apiFetch('/api/products');
+    renderProducts(list);
+  } catch(e) { toast('Не удалось загрузить товары', 'error'); }
+}
+
+function renderProducts(list) {
+  const tbody = document.getElementById('productsTable');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state">Товаров пока нет — добавьте первый!</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(p => `
+    <tr>
+      <td>${p.image
+        ? `<img class="product-img" src="${p.image}" onerror="this.parentElement.innerHTML='<div class=&quot;product-img-ph&quot;>📦</div>'">`
+        : '<div class="product-img-ph">📦</div>'}</td>
+      <td>
+        <strong>${esc(p.name)}</strong>
+        ${p.is_featured ? ' <span style="background:rgba(255,149,0,0.15);color:#FF9500;border-radius:5px;padding:2px 6px;font-size:11px;font-weight:700">Рек.</span>' : ''}
+        ${p.is_new ? ' <span style="background:rgba(52,199,89,0.15);color:var(--green);border-radius:5px;padding:2px 6px;font-size:11px;font-weight:700">Новинка</span>' : ''}
+        ${p.description ? `<br><small style="color:var(--text-muted)">${esc(p.description.substring(0,60))}…</small>` : ''}
+      </td>
+      <td><span class="badge">${esc(p.brand)}</span></td>
+      <td style="color:var(--text-muted)">${esc(p.series || '—')}</td>
+      <td class="price">${p.price.toLocaleString('ru-RU')} ₽</td>
+      <td style="white-space:nowrap">
+        <button class="btn-edit" onclick="editProduct(${p.id})">Изменить</button>
+        <button class="btn-delete" onclick="deleteProduct(${p.id},'${esc(p.name)}')">Удалить</button>
+      </td>
+    </tr>`).join('');
+}
+
+function openProductModal(p = null) {
+  editingProductId = p ? p.id : null;
+  document.getElementById('productModalTitle').textContent = p ? 'Изменить товар' : 'Добавить товар';
+  document.getElementById('pName').value = p?.name || '';
+  document.getElementById('pBrand').value = p?.brand || 'apple';
+  document.getElementById('pSeries').value = p?.series || '';
+  document.getElementById('pPrice').value = p?.price || '';
+  document.getElementById('pImage').value = p?.image || '';
+  document.getElementById('pStorage').value = p?.storage || '';
+  document.getElementById('pColor').value = p?.color || '';
+  document.getElementById('pSim').value = p?.sim || '';
+  document.getElementById('pDesc').value = p?.description || '';
+  document.getElementById('pFeatured').value = p?.is_featured ? 'true' : 'false';
+  document.getElementById('pNew').value = p?.is_new ? 'true' : 'false';
+  const box = document.getElementById('pImagePreview');
+  if (p?.image) { box.querySelector('img').src = p.image; box.classList.add('visible'); }
+  else box.classList.remove('visible');
+  document.getElementById('productModal').classList.add('active');
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('active');
+  editingProductId = null;
+}
+
+async function editProduct(id) {
+  try {
+    const p = await apiFetch('/api/products/' + id);
+    openProductModal(p);
+  } catch(e) { toast('Ошибка загрузки', 'error'); }
+}
+
+async function saveProduct() {
+  const data = {
+    name:        document.getElementById('pName').value.trim(),
+    brand:       document.getElementById('pBrand').value,
+    series:      document.getElementById('pSeries').value.trim() || null,
+    price:       parseFloat(document.getElementById('pPrice').value) || 0,
+    image:       document.getElementById('pImage').value.trim() || null,
+    storage:     document.getElementById('pStorage').value.trim() || null,
+    color:       document.getElementById('pColor').value.trim() || null,
+    sim:         document.getElementById('pSim').value.trim() || null,
+    description: document.getElementById('pDesc').value.trim() || null,
+    is_featured: document.getElementById('pFeatured').value === 'true',
+    is_new:      document.getElementById('pNew').value === 'true',
+  };
+  if (!data.name)  { toast('Введите название', 'error'); return; }
+  if (!data.price) { toast('Введите цену', 'error'); return; }
+  try {
+    if (editingProductId) {
+      await apiFetch('/api/products/' + editingProductId, { method: 'PUT', body: JSON.stringify(data) });
+      toast('Товар обновлён ✓');
+    } else {
+      await apiFetch('/api/products', { method: 'POST', body: JSON.stringify(data) });
+      toast('Товар добавлен ✓');
+    }
+    closeProductModal();
+    loadProducts();
+  } catch(e) { toast('Ошибка сохранения', 'error'); }
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm(`Удалить товар "${name}"?`)) return;
+  try {
+    await apiFetch('/api/products/' + id, { method: 'DELETE' });
+    toast('Товар удалён');
+    loadProducts();
+  } catch(e) { toast('Ошибка удаления', 'error'); }
+}
+
+// ════════════════════════════════
+// ── BANNERS ──
+// ════════════════════════════════
+let editingBannerId = null;
+
+async function loadBanners() {
+  try {
+    const list = await apiFetch('/api/banners/all');
+    renderBanners(list);
+  } catch(e) { toast('Не удалось загрузить баннеры', 'error'); }
+}
+
+function renderBanners(list) {
+  const grid = document.getElementById('bannersGrid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty-state" style="width:100%">Баннеров пока нет — добавьте первый!</div>';
+    return;
+  }
+  grid.innerHTML = list.map(b => `
+    <div class="banner-card">
+      <div class="banner-preview">
+        ${b.image_url
+          ? `<img src="${esc(b.image_url)}" onerror="this.style.display='none'">`
+          : '<span class="banner-preview-ph">Нет изображения</span>'}
+        ${!b.active ? '<span class="banner-inactive-badge">Неактивен</span>' : ''}
+      </div>
+      <div class="banner-body">
+        <div class="banner-title">${esc(b.title)}</div>
+        ${b.subtitle ? `<div class="banner-sub">${esc(b.subtitle)}</div>` : ''}
+        ${b.button_text ? `<div class="banner-btn-hint">Кнопка: ${esc(b.button_text)}</div>` : ''}
+        <div class="banner-actions">
+          <button class="btn-edit" onclick="editBanner(${b.id})">Изменить</button>
+          <button class="btn-delete" onclick="deleteBanner(${b.id},'${esc(b.title)}')">Удалить</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openBannerModal(b = null) {
+  editingBannerId = b ? b.id : null;
+  document.getElementById('bannerModalTitle').textContent = b ? 'Изменить баннер' : 'Добавить баннер';
+  document.getElementById('bTitle').value = b?.title || '';
+  document.getElementById('bSubtitle').value = b?.subtitle || '';
+  document.getElementById('bImage').value = b?.image_url || '';
+  document.getElementById('bBtnText').value = b?.button_text || '';
+  document.getElementById('bBtnUrl').value = b?.button_url || '';
+  document.getElementById('bOrder').value = b?.order ?? 0;
+  document.getElementById('bActive').value = b?.active !== false ? 'true' : 'false';
+  const box = document.getElementById('bImagePreview');
+  if (b?.image_url) { box.querySelector('img').src = b.image_url; box.classList.add('visible'); }
+  else box.classList.remove('visible');
+  document.getElementById('bannerModal').classList.add('active');
+}
+
+function closeBannerModal() {
+  document.getElementById('bannerModal').classList.remove('active');
+  editingBannerId = null;
+}
+
+async function editBanner(id) {
+  try {
+    const list = await apiFetch('/api/banners/all');
+    const b = list.find(x => x.id === id);
+    if (b) openBannerModal(b);
+  } catch(e) { toast('Ошибка загрузки', 'error'); }
+}
+
+async function saveBanner() {
+  const data = {
+    title:       document.getElementById('bTitle').value.trim(),
+    subtitle:    document.getElementById('bSubtitle').value.trim() || null,
+    image_url:   document.getElementById('bImage').value.trim() || null,
+    button_text: document.getElementById('bBtnText').value.trim() || null,
+    button_url:  document.getElementById('bBtnUrl').value.trim() || null,
+    order:       parseInt(document.getElementById('bOrder').value) || 0,
+    active:      document.getElementById('bActive').value === 'true',
+  };
+  if (!data.title) { toast('Введите заголовок', 'error'); return; }
+  try {
+    if (editingBannerId) {
+      await apiFetch('/api/banners/' + editingBannerId, { method: 'PUT', body: JSON.stringify(data) });
+      toast('Баннер обновлён ✓');
+    } else {
+      await apiFetch('/api/banners', { method: 'POST', body: JSON.stringify(data) });
+      toast('Баннер добавлен ✓');
+    }
+    closeBannerModal();
+    loadBanners();
+  } catch(e) { toast('Ошибка сохранения', 'error'); }
+}
+
+async function deleteBanner(id, title) {
+  if (!confirm(`Удалить баннер "${title}"?`)) return;
+  try {
+    await apiFetch('/api/banners/' + id, { method: 'DELETE' });
+    toast('Баннер удалён');
+    loadBanners();
+  } catch(e) { toast('Ошибка удаления', 'error'); }
+}
+
+// ── Helpers ──
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
+});
+</script>
+</body>
+</html>
