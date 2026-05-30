@@ -842,12 +842,53 @@
       <div class="cart-total">
         Итого: <strong id="cartTotal">0 ₽</strong>
       </div>
-      <a href="https://t.me/reSeller763" target="_blank" class="btn-primary cart-order-btn">Оформить заказ</a>
+      <button class="btn-primary cart-order-btn" onclick="openOrderForm()">Оформить заказ</button>
     </div>
   </aside>
 
   <!-- ══ SEARCH RESULTS ══ -->
   <div class="search-dropdown glass" id="searchDropdown"></div>
+
+  <!-- ══ ORDER FORM MODAL ══ -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal-box modal-box--wide">
+      <div class="modal-head">
+        <h3>Оформление заказа</h3>
+        <button class="modal-close-btn" onclick="closeOrderForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="orderFormContent">
+        <div id="orderCartSummary"></div>
+        <form id="orderForm" onsubmit="submitOrder(event)">
+          <div class="form-group">
+            <label>Имя *</label>
+            <input type="text" id="orderName" placeholder="Ваше имя" required>
+          </div>
+          <div class="form-group">
+            <label>Телефон *</label>
+            <input type="tel" id="orderPhone" placeholder="+7 (___) ___-__-__" required>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="orderEmail" placeholder="example@mail.ru">
+          </div>
+          <div class="form-group">
+            <label>Комментарий</label>
+            <textarea id="orderComment" placeholder="Пожелания к заказу..."></textarea>
+          </div>
+          <div class="order-form-error" id="orderFormError"></div>
+          <button type="submit" class="btn-primary" style="width:100%">Отправить заказ</button>
+        </form>
+      </div>
+      <div id="orderSuccess" style="display:none;text-align:center;padding:32px 0">
+        <div class="order-success-icon">✓</div>
+        <h3 style="margin-bottom:8px">Заказ принят!</h3>
+        <p style="color:var(--text-muted)">Мы свяжемся с вами в ближайшее время.</p>
+        <button class="btn-primary" style="margin-top:24px" onclick="closeOrderForm()">Закрыть</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ══ LOGIN MODAL ══ -->
   <div class="modal-overlay" id="loginModal">

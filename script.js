@@ -94,8 +94,51 @@ document.addEventListener('keydown', e => {
     document.getElementById('cartOverlay').classList.remove('active');
     document.body.style.overflow = '';
     document.getElementById('searchDropdown').classList.remove('active');
+    closeOrderForm();
   }
 });
+
+// ── Order form ──
+function openOrderForm() {
+  const summary = document.getElementById('orderCartSummary');
+  if (summary) {
+    const items = cart.map(i => `<div class="order-cart-item"><span>${i.name}</span><span>${formatPrice(i.price)}</span></div>`).join('');
+    const total = cart.reduce((acc, i) => acc + i.price, 0);
+    summary.innerHTML = `<div class="order-cart-list">${items}</div><div class="order-cart-total">Итого: <strong>${formatPrice(total)}</strong></div>`;
+  }
+  document.getElementById('orderForm').reset();
+  document.getElementById('orderFormError').textContent = '';
+  document.getElementById('orderFormContent').style.display = '';
+  document.getElementById('orderSuccess').style.display = 'none';
+  document.getElementById('cartSidebar').classList.remove('active');
+  document.getElementById('cartOverlay').classList.remove('active');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('orderModal').classList.add('active');
+}
+
+function closeOrderForm() {
+  const modal = document.getElementById('orderModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function submitOrder(e) {
+  e.preventDefault();
+  const name = document.getElementById('orderName').value.trim();
+  const phone = document.getElementById('orderPhone').value.trim();
+  if (!name || !phone) {
+    document.getElementById('orderFormError').textContent = 'Пожалуйста, заполните обязательные поля.';
+    return;
+  }
+  // TODO: отправка на почту через /api/order
+  document.getElementById('orderFormContent').style.display = 'none';
+  document.getElementById('orderSuccess').style.display = '';
+  cart.length = 0;
+  saveCart();
+  renderCart();
+}
 
 // ── Search ──
 const searchInput = document.getElementById('searchInput');
