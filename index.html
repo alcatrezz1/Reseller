@@ -902,20 +902,18 @@
         <div id="orderCartSummary"></div>
         <form id="orderForm" onsubmit="submitOrder(event)">
           <div class="form-group">
-            <label>Имя *</label>
-            <input type="text" id="orderName" placeholder="Ваше имя" required>
-          </div>
-          <div class="form-group">
-            <label>Телефон *</label>
+            <label>Номер телефона *</label>
             <input type="tel" id="orderPhone" placeholder="+7 (___) ___-__-__" required>
           </div>
           <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="orderEmail" placeholder="example@mail.ru">
+            <label>ФИО *</label>
+            <input type="text" id="orderName" placeholder="Иванов Иван Иванович" required>
           </div>
           <div class="form-group">
-            <label>Комментарий</label>
-            <textarea id="orderComment" placeholder="Пожелания к заказу..."></textarea>
+            <label>Социальные сети <span style="color:var(--text-muted);font-weight:400">(необязательно)</span></label>
+            <input type="text" id="orderTelegram" placeholder="Telegram: @username" style="margin-bottom:8px">
+            <input type="text" id="orderVk" placeholder="ВКонтакте: vk.com/id" style="margin-bottom:8px">
+            <input type="text" id="orderWhatsapp" placeholder="WhatsApp: +7 (___) ___-__-__">
           </div>
           <div class="order-form-error" id="orderFormError"></div>
           <button type="submit" class="btn-primary" style="width:100%">Отправить заказ</button>

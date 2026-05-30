@@ -126,13 +126,15 @@ function closeOrderForm() {
 
 function submitOrder(e) {
   e.preventDefault();
-  const name = document.getElementById('orderName').value.trim();
   const phone = document.getElementById('orderPhone').value.trim();
-  if (!name || !phone) {
+  const name = document.getElementById('orderName').value.trim();
+  if (!phone || !name) {
     document.getElementById('orderFormError').textContent = 'Пожалуйста, заполните обязательные поля.';
     return;
   }
   // TODO: отправка на почту через /api/order
+  // Данные для отправки:
+  // { phone, name, telegram, vk, whatsapp, items: cart }
   document.getElementById('orderFormContent').style.display = 'none';
   document.getElementById('orderSuccess').style.display = '';
   cart.length = 0;
