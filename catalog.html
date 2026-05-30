@@ -1043,5 +1043,63 @@
   </nav>
 
   <script src="script.js"></script>
+  <script>
+  function _esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function _plural(n) {
+    const m=n%10,c=n%100;
+    if(m===1&&c!==11) return n+' товар';
+    if([2,3,4].includes(m)&&![12,13,14].includes(c)) return n+' товара';
+    return n+' товаров';
+  }
+  function _renderCard(p) {
+    const badge = p.is_new ? '<div class="product-badge badge-new">Новинка</div>'
+                : p.is_featured ? '<div class="product-badge badge-pro">Хит</div>' : '';
+    const visual = p.image
+      ? `<div class="product-visual" style="padding:0;min-height:190px"><img src="${_esc(p.image)}" alt="${_esc(p.name)}" style="width:100%;height:190px;object-fit:cover;display:block;border-radius:var(--radius-xl) var(--radius-xl) 0 0"></div>`
+      : `<div class="product-visual"><div style="font-size:52px;opacity:0.25">📦</div></div>`;
+    const specs = p.description ? `<div class="product-specs">${_esc(p.description)}</div>` : '';
+    return `<div class="product-card glass"
+      data-brand="${_esc(p.brand)}"
+      data-series="${_esc(p.series||'')}"
+      data-storage="${_esc(p.storage||'')}"
+      data-sim="${_esc(p.sim||'')}"
+      data-color="${_esc(p.color||'')}">
+      ${badge}${visual}
+      <div class="product-info">
+        <div class="product-brand">${_esc(p.brand)}</div>
+        <h3 class="product-name">${_esc(p.name)}</h3>
+        ${specs}
+        <div class="product-bottom">
+          <div class="product-price">${p.price.toLocaleString('ru-RU')} <span>₽</span></div>
+          <button class="buy-btn" onclick="document.getElementById('callModal')&&document.getElementById('callModal').classList.add('active')">Заказать</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  async function loadCatalogProducts() {
+    try {
+      const res = await fetch('/api/products');
+      const products = await res.json();
+      const byBrand = {};
+      products.forEach(p => { if(!byBrand[p.brand]) byBrand[p.brand]=[]; byBrand[p.brand].push(p); });
+      document.querySelectorAll('.brand-section').forEach(section => {
+        const brand = section.id.replace('brand-','');
+        const grid = section.querySelector('.products-grid');
+        const countEl = section.querySelector('.bs-count');
+        const items = byBrand[brand] || [];
+        grid.innerHTML = items.map(_renderCard).join('');
+        if(countEl) countEl.textContent = _plural(items.length);
+        section.style.display = items.length ? '' : 'none';
+      });
+      // re-apply URL filter after products loaded
+      const params = new URLSearchParams(location.search);
+      if(params.get('brand')) filterBrand(params.get('brand'), true);
+      else if(params.get('series')) filterSeries(params.get('series'), true);
+    } catch(e) { console.error('Ошибка загрузки товаров:', e); }
+  }
+  document.addEventListener('DOMContentLoaded', loadCatalogProducts);
+  </script>
 </body>
 </html>

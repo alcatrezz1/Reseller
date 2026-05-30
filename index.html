@@ -1073,5 +1073,60 @@
   </nav>
 
   <script src="script.js"></script>
+  <script>
+  function _esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  async function loadHomepageProducts() {
+    try {
+      const [featuredRes, newRes] = await Promise.all([
+        fetch('/api/products?featured=true'),
+        fetch('/api/products?is_new=true')
+      ]);
+      const featured = await featuredRes.json();
+      const newItems = await newRes.json();
+
+      // Recommended carousel
+      const carousel = document.getElementById('recCarousel');
+      if(carousel && featured.length) {
+        carousel.innerHTML = featured.map(p => `
+          <div class="rec-card glass" onclick="location.href='catalog.html?brand=${_esc(p.brand)}'">
+            ${p.image
+              ? `<div class="rec-visual" style="padding:0;overflow:hidden;border-radius:14px 14px 0 0"><img src="${_esc(p.image)}" alt="${_esc(p.name)}" style="width:100%;height:140px;object-fit:cover;display:block"></div>`
+              : `<div class="rec-visual" style="display:flex;align-items:center;justify-content:center;font-size:44px;opacity:0.25">📦</div>`}
+            <div class="rec-info">
+              <div class="rec-name">${_esc(p.name)}</div>
+              <div class="rec-price">${p.price.toLocaleString('ru-RU')} <span>₽</span></div>
+            </div>
+          </div>`).join('');
+      }
+
+      // New arrivals
+      const newSection = document.getElementById('new-arrivals');
+      if(newSection && newItems.length) {
+        let grid = newSection.querySelector('.rec-carousel');
+        if(!grid) {
+          const wrap = document.createElement('div');
+          wrap.className = 'rec-carousel-wrap reveal';
+          wrap.innerHTML = '<div class="rec-carousel" id="newCarousel"></div>';
+          newSection.querySelector('.container').appendChild(wrap);
+          grid = wrap.querySelector('.rec-carousel');
+        }
+        const emptyEl = newSection.querySelector('.empty-section');
+        if(emptyEl) emptyEl.remove();
+        grid.innerHTML = newItems.map(p => `
+          <div class="rec-card glass" onclick="location.href='catalog.html?brand=${_esc(p.brand)}'">
+            ${p.image
+              ? `<div class="rec-visual" style="padding:0;overflow:hidden;border-radius:14px 14px 0 0"><img src="${_esc(p.image)}" alt="${_esc(p.name)}" style="width:100%;height:140px;object-fit:cover;display:block"></div>`
+              : `<div class="rec-visual" style="display:flex;align-items:center;justify-content:center;font-size:44px;opacity:0.25">📦</div>`}
+            <div class="rec-info">
+              <div class="rec-name">${_esc(p.name)}</div>
+              <div class="rec-price">${p.price.toLocaleString('ru-RU')} <span>₽</span></div>
+            </div>
+          </div>`).join('');
+      }
+    } catch(e) { console.error('Ошибка загрузки товаров:', e); }
+  }
+  document.addEventListener('DOMContentLoaded', loadHomepageProducts);
+  </script>
 </body>
 </html>
