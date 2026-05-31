@@ -98,6 +98,40 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ── Product detail modal ──
+window._allProducts = {};
+
+function openProductModal(p) {
+  document.getElementById('pmTitle').textContent = p.name;
+  const img = document.getElementById('pmImage');
+  img.innerHTML = p.image
+    ? `<img src="${p.image}" alt="${p.name}" style="width:100%;max-height:280px;object-fit:cover;display:block">`
+    : `<div style="height:200px;display:flex;align-items:center;justify-content:center;font-size:64px;opacity:0.2">📦</div>`;
+  const badges = document.getElementById('pmBadges');
+  badges.innerHTML = (p.is_new ? '<span class="product-badge badge-new">Новинка</span>' : '')
+    + (p.is_featured ? '<span class="product-badge badge-pro">Хит</span>' : '');
+  const specs = document.getElementById('pmSpecs');
+  const specItems = [
+    p.brand && `<span class="pm-spec">${p.brand}</span>`,
+    p.series && `<span class="pm-spec">${p.series}</span>`,
+    p.storage && `<span class="pm-spec">${p.storage}</span>`,
+    p.sim && `<span class="pm-spec">${p.sim}</span>`,
+    p.color && `<span class="pm-spec">${p.color}</span>`,
+  ].filter(Boolean);
+  specs.innerHTML = specItems.join('');
+  document.getElementById('pmDesc').textContent = p.description || '';
+  document.getElementById('pmPrice').innerHTML = `${Number(p.price).toLocaleString('ru-RU')} <span style="font-size:16px;font-weight:400">₽</span>`;
+  const btn = document.getElementById('pmBuyBtn');
+  btn.onclick = () => { addToCart(p.name, p.price); closeProductModal(); };
+  document.getElementById('productModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+  const m = document.getElementById('productModal');
+  if (m) { m.classList.remove('active'); document.body.style.overflow = ''; }
+}
+
 // ── Order form ──
 function openOrderForm() {
   const summary = document.getElementById('orderCartSummary');

@@ -928,6 +928,26 @@
     </div>
   </div>
 
+  <!-- ══ PRODUCT DETAIL MODAL ══ -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-box modal-box--wide" style="max-width:560px">
+      <div class="modal-head">
+        <h3 id="pmTitle">Товар</h3>
+        <button class="modal-close-btn" onclick="closeProductModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="pmImage" style="margin-bottom:16px;border-radius:16px;overflow:hidden;min-height:200px;background:rgba(255,255,255,0.04)"></div>
+      <div id="pmBadges" style="display:flex;gap:8px;margin-bottom:12px"></div>
+      <div id="pmSpecs" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px"></div>
+      <div id="pmDesc" style="color:var(--text-muted);font-size:14px;line-height:1.6;margin-bottom:20px"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <div id="pmPrice" style="font-size:26px;font-weight:800;letter-spacing:-0.5px"></div>
+        <button class="btn-primary" id="pmBuyBtn" style="min-width:140px">В корзину</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ══ LOGIN MODAL ══ -->
   <div class="modal-overlay" id="loginModal">
     <div class="modal-box">
